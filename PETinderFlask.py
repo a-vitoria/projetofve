@@ -40,35 +40,39 @@ app = Flask(__name__, static_url_path='')
 def fistpage():
     return render_template('1.html')
     
-@app.route('/login')
+@app.route('/login', methods=['POST','GET'])
 def conta():
-    nomepessoa = request.args['nomepessoa']
-    email = request.args['email']
-    senha = request.args['senha']
+    if request.method == 'POST':
+        nomepessoa = request.form['nomepessoa']
+        email = request.form['email']
+        senha = request.form['senha']
     
     return render_template('login.html', dic = pessoas, erro = '')
     
-@app.route('/cadastro')
+@app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
-    nome = request.args['nome']
-    raca = request.args['raca']
-    sexo = request.args['sexo']
-    idade = request.args['idade']
-    cor = request.args['cor']
-    saude = request.args['saude']
-    cidade = request.args['cidade']
+    if request.method == 'POST':
+        nome = request.form['nome']
+        raca = request.form['raca']
+        sexo = request.form['sexo']
+        idade = request.form['idade']
+        cor = request.form['cor']
+        saude = request.form['saude']
+        cidade = request.form['cidade']
     
     return render_template('cadastro.html', dic = caesexo, erro = '')
     
-@app.route('/caddoar')
+@app.route('/caddoar', methods=['POST','GET'])
 def caddoar():
-    nome = request.args['nome']
-    raca = request.args['raca']
-    sexo = request.args['sexo']
-    idade = request.args['idade']
-    cor = request.args['cor']
-    saude = request.args['saude']
-    cidade = request.args['cidade']
+    if request.method == 'POST':
+        
+        nome = request.form['nome']
+        raca = request.form['raca']
+        sexo = request.form['sexo']
+        idade = request.form['idade']
+        cor = request.form['cor']
+        saude = request.form['saude']
+        cidade = request.form['cidade']
     
     return render_template('caddoar.html', dic = caesdoar, erro = '')
     
