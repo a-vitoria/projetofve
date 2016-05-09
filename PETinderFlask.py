@@ -1,35 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
 
-class Pessoa():
-    
-    def __init__(self, nomepessoa, email, senha, caes):
-        self.nomepessoa = nomepessoa
-        self.email = email
-        self.senha = senha
-        self.caes = caes
-
-class CaesRB():
-    
-    def __init__(self, nome, sexo, raca, cor, idade, saude, cidade):
-        self.nome = nome
-        self.sexo = sexo
-        self.raca = raca
-        self.cor = cor
-        self.idade = idade
-        self.saude = saude
-        self.cidade = cidade
-        
-class CaesDoar():
-    
-    def __init__(self, nome, sexo, raca, cor, idade, saude, cidade):
-        self.nome = nome
-        self.sexo = sexo
-        self.raca = raca
-        self.cor = cor
-        self.idade = idade
-        self.saude = saude
-        self.cidade = cidade
-
 pessoas = {}        
 caesexo = {}
 caesdoar = {}
@@ -38,6 +8,9 @@ app = Flask(__name__, static_url_path='')
 
 @app.route('/')
 def fistpage():
+    email = request.args['email']
+    senha = request.args['senha']
+    
     return render_template('1.html')
     
 @app.route('/login', methods=['POST','GET'])
@@ -46,8 +19,10 @@ def conta():
         nomepessoa = request.form['nomepessoa']
         email = request.form['email']
         senha = request.form['senha']
+        pessoa = Pessoa(nomepessoa, email, senha)
+        pessoa.SalvarPessoa()
     
-    return render_template('login.html', dic = pessoas, erro = '')
+    return render_template('login.html', erro = '')
     
 @app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
@@ -59,13 +34,14 @@ def cadastro():
         cor = request.form['cor']
         saude = request.form['saude']
         cidade = request.form['cidade']
+        primeiro = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
+        primeiro.SalvarCaesBR()
     
-    return render_template('cadastro.html', dic = caesexo, erro = '')
+    return render_template('cadastro.html', erro = '')
     
 @app.route('/caddoar', methods=['POST','GET'])
 def caddoar():
-    if request.method == 'POST':
-        
+    if request.method == 'POST':       
         nome = request.form['nome']
         raca = request.form['raca']
         sexo = request.form['sexo']
@@ -73,8 +49,10 @@ def caddoar():
         cor = request.form['cor']
         saude = request.form['saude']
         cidade = request.form['cidade']
+        segundo = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
+        segundo.SalvarCaesDoar()
     
-    return render_template('caddoar.html', dic = caesdoar, erro = '')
+    return render_template('caddoar.html', erro = '')
     
 @app.route('/home')
 def home():
