@@ -1,9 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
 
-pessoas = {}        
-caesexo = {}
-caesdoar = {}
-
 app = Flask(__name__, static_url_path='')
 
 @app.route('/')
