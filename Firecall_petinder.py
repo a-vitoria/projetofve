@@ -8,17 +8,22 @@ import firecall
 #
 PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
 
-pessoas={}
-caes={}
-
+dicionario={}
+dicionariocaosex={}
+dicionariocaodoa={}
 class Pessoa():
     
     def __init__(self, nomepessoa, email, senha):
         self.nomepessoa = nomepessoa
         self.email = email
         self.senha = senha
-#    def Salvar_Pessoa(self):
-
+    def Salvar_Pessoa(self):
+        dicionario["Nome"]=self.nomepessoa
+        dicionario["Email"]=self.email
+        dicionario["Senha"]=self.senha
+        dicionario["CaesBR"]=dicionariocaosex
+        dicionario["CaesDoar"]=dicionariocaodoa
+        return dicionario
 
 class Caes():
     
@@ -30,22 +35,28 @@ class Caes():
         self.idade = idade
         self.saude = saude
         self.cidade = cidade
-    #    def Salvar_Caes(self):
 
-Pessoa.nomepessoa=input('Nome?')
-Pessoa.email=input('Email?')
-Pessoa.senha=input('Senha?')
-
-Caes.nome = input('nome?')
-Caes.sexo = input('sexo?')
-Caes.raca = input('raca?')
-Caes.cor = input('cor?')
-Caes.idade =input('idade?')
-Caes.saude =input('saude?')
-Caes.cidade =input('cidade?')
-dicionario = {"Nome" : Pessoa.nomepessoa, "Nome de usuario" : Pessoa.nomepessoa, "Email" : Pessoa.email, "Senha" : Pessoa.senha,"Cães":Caes}
-#Lucas=Caes("Lucas","masculino","york","preto","14","castrado","mogi")
-dicionariocao={'nome':Caes.nome,'sexo':Caes.sexo,'raca':Caes.raca,'cor':Caes.cor,'idade':Caes.idade,'saude':Caes.saude,'cidade':Caes.cidade}
-
+class CaesBR(Caes):
+    def Salvar_Caes(self):
+        def Salvar_Caes(self):
+            dicionariocaosex["Nome"]=self.nome
+            dicionariocaosex["Sexo"]=self.sexo
+            dicionariocaosex["Raca"]=self.raca
+            dicionariocaosex["Cor"]=self.cor
+            dicionariocaosex["Idade"]=self.idade
+            dicionariocaosex["Saude"]=self.saude
+            dicionariocaosex["Cidade"]=self.cidade
+            return dicionariocaosex
+class CaesDoar(Caes):
+    def Salvar_Caes(self):
+        def Salvar_Caes(self):
+            dicionariocaodoa["Nome"]=self.nome
+            dicionariocaodoa["Sexo"]=self.sexo
+            dicionariocaodoa["Raca"]=self.raca
+            dicionariocaodoa["Cor"]=self.cor
+            dicionariocaodoa["Idade"]=self.idade
+            dicionariocaodoa["Saude"]=self.saude
+            dicionariocaodoa["Cidade"]=self.cidade
+            return dicionariocaodoa
 PETinder.put(point="/Pessoas",data=dicionario)
 
