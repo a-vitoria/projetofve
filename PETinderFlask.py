@@ -2,19 +2,20 @@ from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__, static_url_path='')
 
-@app.route('/')
+@app.route('/', methods=['POST','GET'])
 def firstpage():
-    email = request.args['email']
-    senha = request.args['senha']
-    if email in dicionario:
-        if senha in dicionario:
-            return render_template('1.html', dic = dicionario)
-        else: 
-            e = 'Senha incorreta'
-            return render_template('1.html', dic = dicionario, erro = e) 
-    else:
-        e = 'Usuário inválido'
-        return render_template('1.html', dic = dicionario, erro = e)
+    if request.method == 'POST':
+        email = request.form['email']
+        senha = request.form['senha']
+        if email in dicionario:
+            if senha in dicionario:
+                return render_template('1.html', dic = dicionario)
+            else: 
+                e = 'Senha incorreta'
+                return render_template('1.html', dic = dicionario, erro = e) 
+        else:
+            e = 'Usuário inválido'
+            return render_template('1.html', dic = dicionario, erro = e)
     
 @app.route('/login', methods=['POST','GET'])
 def conta():
@@ -22,8 +23,13 @@ def conta():
         nomepessoa = request.form['nomepessoa']
         email = request.form['email']
         senha = request.form['senha']
-        pessoa = Pessoa(nomepessoa, email, senha)
-        pessoa.Salvar_Pessoa()
+        if email in dicionario:
+            e = 'Email já cadastrado'
+            return render_template('login.html', dic = dicionario, erro = e)
+            
+        else:
+            pessoa = Pessoa(nomepessoa, email, senha)
+            pessoa.Salvar_Pessoa()
     
     return render_template('login.html', erro = '')
     
@@ -56,18 +62,29 @@ def caddoar():
         segundo.Salvar_CaesDoar()
     
     return render_template('caddoar.html', erro = '')
-    
+        
 @app.route('/home')
 def home():
     return render_template('home.html')
     
 @app.route('/perfil')
 def perfil():
+    #Listar_CaesBR  
     #página que mostrará os cães cadastrados pelo usuário
     return render_template('perfil.html')
     
+@app.route('/doar')
+def doar():
+    #Listar_CaesDoar
+    #página que mostrará os animais cadastrados pelo usuário para doação
+    return render_template('doar.html')
+    
+#OS ITENS ACIMA TÊM QUE ESTAR PRONTOS ATÉ DIA 16/05    
+
 @app.route('/opt')
 def opt():
+    #prox
+    #ant
     #página que mostrará as opções de cães e tem as setinhas para passar
     return render_template('opt.html')
     
@@ -76,14 +93,9 @@ def user():
     #informações sobre o cão escolhido
     return render_template('user.html')
     
-@app.route('/doar')
-def doar():
-    #página que mostrará os animais cadastrados pelo usuário para doação
-    return render_template('doar.html')
-    
 @app.route('/adotar')
 def adotar():
-    #animais disponíveis para doação e setinhas para passar
+    #animais disponíveis para adoção e setinhas para passar
     return render_template('adotar.html')
     
 @app.route('/adotar/adote')
