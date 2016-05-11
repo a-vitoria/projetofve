@@ -2,7 +2,7 @@
 #"""
 #Created on Mon May  2 12:41:14 2016
 #
-#@author: Eduardo Prawita
+#@author: Pessoa Prawita
 #"""
 import firecall
 #
@@ -17,13 +17,16 @@ class Pessoa():
         self.nomepessoa = nomepessoa
         self.email = email
         self.senha = senha
+        self.dicionario=dicionario
+        self.caosex=[]
+        self.caodoa=[]
+        
     def Salvar_Pessoa(self):
-        dicionario["Nome"]=self.nomepessoa
-        dicionario["Email"]=self.email
-        dicionario["Senha"]=self.senha
-        dicionario["CaesBR"]=dicionariocaosex
-        dicionario["CaesDoar"]=dicionariocaodoa
+        dicionario["{0}".format(self.nomepessoa)]=self.nomepessoa,self.email,self.senha,self.caosex,self.caodoa
         return dicionario
+        
+
+        
 
 class Caes():
     
@@ -35,28 +38,41 @@ class Caes():
         self.idade = idade
         self.saude = saude
         self.cidade = cidade
-
+        self.nomepessoa=Pessoa.nomepessoa
+        
+        
 class CaesBR(Caes):
-    def Salvar_Caes(self):
-        def Salvar_Caes(self):
-            dicionariocaosex["Nome"]=self.nome
-            dicionariocaosex["Sexo"]=self.sexo
-            dicionariocaosex["Raca"]=self.raca
-            dicionariocaosex["Cor"]=self.cor
-            dicionariocaosex["Idade"]=self.idade
-            dicionariocaosex["Saude"]=self.saude
-            dicionariocaosex["Cidade"]=self.cidade
-            return dicionariocaosex
+    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade):
+        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
+    
+    def Salvar_CaesBR(self):
+        dicionariocaosex["{0}".format(self.nome)]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.nomepessoa
+        Pessoa.dicionario["{0}".format(Pessoa.nomepessoa)][3].append(self.nome)
+        return dicionariocaosex
+#    def Listar_CaesBR(self):
+        
+        
 class CaesDoar(Caes):
-    def Salvar_Caes(self):
-        def Salvar_Caes(self):
-            dicionariocaodoa["Nome"]=self.nome
-            dicionariocaodoa["Sexo"]=self.sexo
-            dicionariocaodoa["Raca"]=self.raca
-            dicionariocaodoa["Cor"]=self.cor
-            dicionariocaodoa["Idade"]=self.idade
-            dicionariocaodoa["Saude"]=self.saude
-            dicionariocaodoa["Cidade"]=self.cidade
-            return dicionariocaodoa
-PETinder.put(point="/Pessoas",data=dicionario)
+    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade):
+        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
 
+    def Salvar_CaesDoar(self):
+        dicionariocaodoa["{0}".format(self.nome)]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.nomepessoa
+        Pessoa.dicionario["{0}".format(Pessoa.nomepessoa)][4].append(self.nome)
+        return dicionariocaodoa
+#    def Listar_CaesDoar(self):
+        
+
+#Pessoa=Pessoa("Pessoa","edu.tirta@gmail.com",0000)
+#Pessoa.Salvar_Pessoa()
+
+#Lucas=CaesBR("Lucas","Masculino","York","Preto","14","Castrado","Mogi")
+#Lucas.Salvar_CaesBR()
+
+
+PETinder.put(point="/Pessoas",data=dicionario)
+PETinder.put(point="/Caes_BR",data=dicionariocaosex)
+PETinder.put(point="/Caes_Doar",data=dicionariocaodoa)
+
+
+#print(Pessoa)
