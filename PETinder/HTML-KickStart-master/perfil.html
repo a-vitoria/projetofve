@@ -24,8 +24,23 @@
 <img src="seuspets.png"/>
 <br><br>
 <a href="cadastro.html"><button class="button orange"><i class="large"><i class="pill"><i class="fa fa-paw"></i></i></i> Cadastrar</button></center></br></br></a>
-<br><br><br><br><br><br><br><br>
-</br></br></br></br></br></br></br>
+<table class="sortable striped">
+						<thead><tr>
+							<th>Cão</th>
+							<th>Escolher esse</th>
+                                        <th>Deletar</th>
+						</tr></thead>
+						<tbody>
+						   
+							{% for e in dic: %}
+							<tr>
+								<td>{{ dic[e].cao }}</td>
+								<td><a href="opt.html"><i class="fa fa-heart"></i></a></td>
+            						<td><a href="./del?numero={{ e }}"><i class="fa fa-trash"></i></a></td>
+                                        </tr>
+							{% endfor %}
+						</tbody>
+					</table>
 </div></div></div>
 <div class="col_2"></div></div>
 <!-- End Grid -->

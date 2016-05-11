@@ -29,7 +29,9 @@
 <div class="col_2">
 </div>
 <div class="col_8">
-<img class="caption" title="Rex, 2 anos, São Paulo-SP" src="teste1.jpg" />
+<img class="caption" title="	{% for e in dic: %}
+{{ dic[e].cao }}, {{ dic[e].idade }} anos, {{ dic[e].cidade }}
+{% endfor %}" src="teste1.jpg" />
 </div>
 <div class="col_2">
 <br></br>
@@ -44,14 +46,16 @@
 <br></br>
 <br></br>
 </div>
-<br><strong>Nome:</strong> Rex
-<br><strong>Idade:</strong> 2 anos
-<br><strong>Cidade:</strong> São Paulo
-<br><strong>Raça:</strong> Shar pei mini
-<br><strong>Sexo:</strong> Masculino
-<br><strong>Cor:</strong> Bege
-<br><strong>Situação de saúde:</strong> Normal
-<br><strong>E-mail p/ contato:</strong> petinder@petinder.com.br
+{% for e in dic: %}
+<br><strong>Nome:</strong> {{ dic[e].cao }}
+<br><strong>Idade:</strong> {{ dic[e].idade }} anos
+<br><strong>Cidade:</strong> {{ dic[e].cidade }}
+<br><strong>Raça:</strong> {{ dic[e].raca }}
+<br><strong>Sexo:</strong> {{ dic[e].sexo }}
+<br><strong>Cor:</strong> {{ dic[e].cor }}
+<br><strong>Situação de saúde:</strong> {{ dic[e].saude }}
+<br><strong>E-mail p/ contato:</strong> {{ dic[e].email }}
+{% endfor %}
 </br></br></br></br></br></br></br>
 </div></div></div>
 <div class="col_2"></div></div>
