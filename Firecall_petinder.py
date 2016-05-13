@@ -7,23 +7,24 @@
 import firecall
 #
 PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
+people=[]
+dogBR=[]
+dogDoar=[]
 
-dicionario={}
-dicionariocaosex={}
-dicionariocaodoa={}
 class Pessoa():
     
     def __init__(self, nomepessoa, email, senha):
         self.nomepessoa = nomepessoa
         self.email = email
         self.senha = senha
-        self.dicionario=dicionario
+        self.dicionario={}
         self.caosex=[]
         self.caodoa=[]
         
     def Salvar_Pessoa(self):
-        dicionario["{0}".format(self.nomepessoa)]=self.nomepessoa,self.email,self.senha,self.caosex,self.caodoa
-        return dicionario
+        self.dicionario[self.nomepessoa]=self.nomepessoa,self.email,self.senha,self.caosex,self.caodoa
+        people.append(self.nomepessoa)        
+        return self.dicionario
         
 
         
@@ -38,7 +39,9 @@ class Caes():
         self.idade = idade
         self.saude = saude
         self.cidade = cidade
-        self.nomepessoa=Pessoa.nomepessoa
+        self.nomepessoa=Eduardo.nomepessoa
+        self.dicionariocaosex={}
+        self.dicionariocaodoa={}
         
         
 class CaesBR(Caes):
@@ -46,9 +49,10 @@ class CaesBR(Caes):
         Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
     
     def Salvar_CaesBR(self):
-        dicionariocaosex["{0}".format(self.nome)]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.nomepessoa
-        Pessoa.dicionario["{0}".format(Pessoa.nomepessoa)][3].append(self.nome)
-        return dicionariocaosex
+        self.dicionariocaosex[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Eduardo.nomepessoa
+        Eduardo.dicionario[Eduardo.nomepessoa][3].append(self.nome)
+        dogBR.append(self.nome)        
+        return self.dicionariocaosex
 #    def Listar_CaesBR(self):
         
         
@@ -57,22 +61,23 @@ class CaesDoar(Caes):
         Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
 
     def Salvar_CaesDoar(self):
-        dicionariocaodoa["{0}".format(self.nome)]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.nomepessoa
-        Pessoa.dicionario["{0}".format(Pessoa.nomepessoa)][4].append(self.nome)
-        return dicionariocaodoa
+        self.dicionariocaodoa[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.nomepessoa
+        (Pessoa.nomepessoa).dicionario[Pessoa.nomepessoa][4].append(self.nome)
+        dogDoar.append(self.nome)
+        return self.dicionariocaodoa
 #    def Listar_CaesDoar(self):
         
 
-#Pessoa=Pessoa("Pessoa","edu.tirta@gmail.com",0000)
-#Pessoa.Salvar_Pessoa()
+Eduardo=Pessoa("Eduardo","edu.tirta@gmail.com","0000")
+Eduardo.Salvar_Pessoa()
 
-#Lucas=CaesBR("Lucas","Masculino","York","Preto","14","Castrado","Mogi")
-#Lucas.Salvar_CaesBR()
+Lucas=CaesBR("Lucas","Masculino","York","Preto","14","Castrado","Mogi")
+Lucas.Salvar_CaesBR()
 
 
-PETinder.put(point="/Pessoas",data=dicionario)
-PETinder.put(point="/Caes_BR",data=dicionariocaosex)
-PETinder.put(point="/Caes_Doar",data=dicionariocaodoa)
+PETinder.put(point="/Pessoas",data=Eduardo.dicionario)
+PETinder.put(point="/Caes_BR",data=Lucas.dicionariocaosex)
+#PETinder.put(point="/Caes_Doar",data=Lucas.dicionariocaodoa)
 
 
 #print(Pessoa)
