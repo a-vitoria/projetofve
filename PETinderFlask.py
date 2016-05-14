@@ -7,8 +7,8 @@ def firstpage():
     if request.method == 'POST':
         email = request.form['email']
         senha = request.form['senha']
-        if email in dicionario:
-            if senha in dicionario:
+        if email in dicionario[nomepessoa]:
+            if senha in dicionario[nomepessoa]:
                 return render_template('1.html', dic = dicionario)
             else: 
                 e = 'Senha incorreta'
@@ -28,8 +28,8 @@ def conta():
             return render_template('login.html', dic = dicionario, erro = e)
             
         else:
-            pessoa = Pessoa(nomepessoa, email, senha)
-            pessoa.Salvar_Pessoa()
+            nomepessoa = Pessoa(nomepessoa, email, senha)
+            nomepessoa.Salvar_Pessoa()
     
     return render_template('login.html', erro = '')
     
@@ -69,7 +69,12 @@ def home():
     
 @app.route('/perfil')
 def perfil():
-    #Listar_CaesBR  
+    x = dicionario["CaesBR"]["Nome"]
+    y = dicionario["CaesBR"]["Raca"]
+    z = dicionario["CaesBR"]["Sexo"]
+    
+    return x, y, z
+    #Listar_CaesBR
     #página que mostrará os cães cadastrados pelo usuário
     return render_template('perfil.html')
     
@@ -83,6 +88,9 @@ def doar():
 
 @app.route('/opt')
 def opt():
+    for i in range len(ListaDeCaes):
+        if /opt?prox:
+            
     #prox
     #ant
     #página que mostrará as opções de cães e tem as setinhas para passar
