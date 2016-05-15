@@ -7,15 +7,15 @@ def firstpage():
     if request.method == 'POST':
         email = request.form['email']
         senha = request.form['senha']
-        if email in dicionario[nomepessoa]:
-            if senha in dicionario[nomepessoa]:
-                return render_template('1.html', dic = dicionario)
+        if email in EMAIL:
+            if Pessoa.dicionario[Pessoa.email][2] == senha:
+                return render_template('1.html', dic = Pessoa.dicionario)
             else: 
                 e = 'Senha incorreta'
-                return render_template('1.html', dic = dicionario, erro = e) 
+                return render_template('1.html', dic = Pessoa.dicionario, erro = e) 
         else:
             e = 'Usuário inválido'
-            return render_template('1.html', dic = dicionario, erro = e)
+            return render_template('1.html', dic = Pessoa.dicionario, erro = e)
     
 @app.route('/login', methods=['POST','GET'])
 def conta():
@@ -23,13 +23,13 @@ def conta():
         nomepessoa = request.form['nomepessoa']
         email = request.form['email']
         senha = request.form['senha']
-        if email in dicionario:
+        if email in EMAIL:
             e = 'Email já cadastrado'
-            return render_template('login.html', dic = dicionario, erro = e)
+            return render_template('login.html', dic = Pessoa.dicionario, erro = e)
             
         else:
-            nomepessoa = Pessoa(nomepessoa, email, senha)
-            nomepessoa.Salvar_Pessoa()
+            request.form['email'] = Pessoa(nomepessoa, email, senha)
+            request.form['email'].Salvar_Pessoa()
     
     return render_template('login.html', erro = '')
     
@@ -43,8 +43,8 @@ def cadastro():
         cor = request.form['cor']
         saude = request.form['saude']
         cidade = request.form['cidade']
-        primeiro = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
-        primeiro.Salvar_CaesBR()
+        request.form['nome'] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
+        request.form['nome'].Salvar_CaesBR()
     
     return render_template('cadastro.html', erro = '')
     
@@ -58,8 +58,8 @@ def caddoar():
         cor = request.form['cor']
         saude = request.form['saude']
         cidade = request.form['cidade']
-        segundo = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
-        segundo.Salvar_CaesDoar()
+        request.form['nome'] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
+        request.form['nome'].Salvar_CaesDoar()
     
     return render_template('caddoar.html', erro = '')
         
@@ -69,11 +69,8 @@ def home():
     
 @app.route('/perfil')
 def perfil():
-    x = dicionario["CaesBR"]["Nome"]
-    y = dicionario["CaesBR"]["Raca"]
-    z = dicionario["CaesBR"]["Sexo"]
-    
-    return x, y, z
+    x = Pessoa.dicionario[Pessoa.email][3]
+    return x
     #Listar_CaesBR
     #página que mostrará os cães cadastrados pelo usuário
     return render_template('perfil.html')
@@ -88,7 +85,7 @@ def doar():
 
 @app.route('/opt')
 def opt():
-    for i in range len(ListaDeCaes):
+    for i in range (len(DogBR)):
         if /opt?prox:
             
     #prox
