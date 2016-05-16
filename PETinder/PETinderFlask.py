@@ -25,7 +25,7 @@ class Pessoa():
 
 class Caes():
     
-    def __init__(self, nome, sexo, raca, cor, idade, saude, cidade):
+    def __init__(self, nome, sexo, raca, cor, idade, saude, cidade,objeto):
         self.nome = nome
         self.sexo = sexo
         self.raca = raca
@@ -33,30 +33,30 @@ class Caes():
         self.idade = idade
         self.saude = saude
         self.cidade = cidade
-        self.email=Pessoa.email
+        self.email=objeto.email
         self.dicionariocaosex={}
         self.dicionariocaodoa={}
         
         
 class CaesBR(Caes):
-    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade):
-        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
+    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade,objeto):
+        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade,objeto)
     
-    def Salvar_CaesBR(self):
+    def Salvar_CaesBR(self,objeto):
         self.dicionariocaosex[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.email
-        Pessoa.dicionario[Pessoa.email][3].append(self.email)
+        objeto.dicionario[objeto.email][3].append(self.email)
         dogBR.append(self.nome)
         return self.dicionariocaosex
 #    def Listar_CaesBR(self):
         
         
 class CaesDoar(Caes):
-    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade):
-        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
+    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade,objeto):
+        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade,objeto)
 
-    def Salvar_CaesDoar(self):
+    def Salvar_CaesDoar(self,objeto):
         self.dicionariocaodoa[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.email
-        (Pessoa.email).dicionario[Pessoa.email][4].append(self.email)
+        (objeto.email).dicionario[objeto.email][4].append(self.email)
         dogDoar.append(self.nome)
         return self.dicionariocaodoa
 #    def Listar_CaesDoar(self):
@@ -71,14 +71,14 @@ def firstpage():
         PETinder.get(point="/ListaEMAIL")
         if email in EMAIL:
             PETinder.get(point="/Pessoas")
-            if Pessoa.dicionario[Pessoa.email][2] == senha:
-                return render_template('main.html', dic = Pessoa.dicionario)
+            if request.form['email'].dicionario[request.form['email'].email][2] == senha:
+                return render_template('main.html', dic = request.form['email'].dicionario)
             else: 
                 e = 'Senha incorreta'
-                return render_template('main.html', dic = Pessoa.dicionario, erro = e) 
+                return render_template('main.html', dic = request.form['email'].dicionario, erro = e) 
         else:
             e = 'Usuário inválido'
-            return render_template('main.html', dic = Pessoa.dicionario, erro = e)
+            return render_template('main.html', dic = request.form['email'].dicionario, erro = e)
             
     return render_template('main.html', pessoa = Pessoa('','',''))        
 
@@ -92,7 +92,7 @@ def conta():
         PETinder.get(point="/ListaEMAIL")
         if email in EMAIL:
             e = 'Email já cadastrado'
-            return render_template('login.html', dic = Pessoa.dicionario, erro = e)
+            return render_template('login.html', dic = request.form['email'].dicionario, erro = e)
             
         else:
             request.form['email'] = Pessoa(nomepessoa, email, senha)
