@@ -1,4 +1,79 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
+
+import firecall
+
+PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
+dogBR=[]
+dogDoar=[]
+EMAIL=[]
+class Pessoa():
+    
+    def __init__(self, nomepessoa, email, senha):
+        self.nomepessoa = nomepessoa
+        self.email = email
+        self.senha = senha
+        self.dicionario={}
+        self.caosex=[]
+        self.caodoa=[]
+        
+    def Salvar_Pessoa(self):
+        self.dicionario[self.email]=self.nomepessoa,self.email,self.senha,self.dogBR,self.dogDoar
+        EMAIL.append(self.email)        
+        return self.dicionario
+        
+class Caes():
+    
+    def __init__(self, nome, sexo, raca, cor, idade, saude, cidade):
+        self.nome = nome
+        self.sexo = sexo
+        self.raca = raca
+        self.cor = cor
+        self.idade = idade
+        self.saude = saude
+        self.cidade = cidade
+        self.email=Eduardo.email
+        self.dicionariocaosex={}
+        self.dicionariocaodoa={}
+        
+        
+class CaesBR(Caes):
+    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade):
+        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
+    
+    def Salvar_CaesBR(self):
+        self.dicionariocaosex[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Eduardo.email
+        Eduardo.dicionario[Eduardo.email][3].append(self.email)
+        dogBR.append(self.nome)        
+        return self.dicionariocaosex
+#    def Listar_CaesBR(self):
+        
+        
+class CaesDoar(Caes):
+    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade):
+        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
+
+    def Salvar_CaesDoar(self):
+        self.dicionariocaodoa[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.email
+        (Pessoa.email).dicionario[Pessoa.email][4].append(self.email)
+        dogDoar.append(self.nome)
+        return self.dicionariocaodoa
+#    def Listar_CaesDoar(self):
+        
+
+Eduardo=Pessoa("Eduardo","edu.tirta@gmail.com","0000")
+Eduardo.Salvar_Pessoa()
+
+Lucas=CaesBR("Lucas","Masculino","York","Preto","14","Castrado","Mogi")
+Lucas.Salvar_CaesBR()
+
+
+PETinder.put(point="/Pessoas",data=Eduardo.dicionario)
+PETinder.put(point="/Caes_BR",data=Lucas.dicionariocaosex)
+PETinder.put(point="/Caes_Doar",data=Lucas.dicionariocaodoa)
+PETinder.put(point="/ListadogBR",data=dogBR)
+PETinder.put(point="/ListadogDoar",data=dogDoar)
+PETinder.put(point="/ListaEMAIL",data=EMAIL)
+
 
 app = Flask(__name__, static_url_path='')
 
@@ -70,43 +145,21 @@ def home():
 @app.route('/perfil')
 def perfil():
     x = Pessoa.dicionario[Pessoa.email][3]
-    return x
+    #return x
     #Listar_CaesBR
     #página que mostrará os cães cadastrados pelo usuário
-    return render_template('perfil.html')
+    return render_template('perfil.html', x)
     
 @app.route('/doar')
 def doar():
+    y = Pessoa.dicionario[Pessoa.email][4]
+    #return y
     #Listar_CaesDoar
     #página que mostrará os animais cadastrados pelo usuário para doação
-    return render_template('doar.html')
+    return render_template('doar.html', y)
     
-#OS ITENS ACIMA TÊM QUE ESTAR PRONTOS ATÉ DIA 16/05    
-
-@app.route('/opt')
-def opt():
-    for i in range (len(DogBR)):
-        if /opt?prox:
-            
-    #prox
-    #ant
-    #página que mostrará as opções de cães e tem as setinhas para passar
-    return render_template('opt.html')
-    
-@app.route('/opt/user')
-def user():
-    #informações sobre o cão escolhido
-    return render_template('user.html')
-    
-@app.route('/adotar')
-def adotar():
-    #animais disponíveis para adoção e setinhas para passar
-    return render_template('adotar.html')
-    
-@app.route('/adotar/adote')
-def adote():
-    #informações sobre o cão escolhido
-    return render_template('adote.html')
+if __name__ == '__main__':
+    app.run(debug=True, host= '0.0.0.0', port=5000)
 
     
     
