@@ -70,7 +70,9 @@ def firstpage():
     if request.method == 'POST':
         email = request.form['email']
         senha = request.form['senha']
+        PETinder.get(point="/ListaEMAIL")
         if email in EMAIL:
+            PETinder.get(point="/Pessoas")
             if Pessoa.dicionario[Pessoa.email][2] == senha:
                 return render_template('1.html', dic = Pessoa.dicionario)
             else: 
@@ -79,6 +81,8 @@ def firstpage():
         else:
             e = 'Usuário inválido'
             return render_template('1.html', dic = Pessoa.dicionario, erro = e)
+            
+
     
 @app.route('/login', methods=['POST','GET'])
 def conta():
@@ -86,6 +90,7 @@ def conta():
         nomepessoa = request.form['nomepessoa']
         email = request.form['email']
         senha = request.form['senha']
+        PETinder.get(point="/ListaEMAIL")
         if email in EMAIL:
             e = 'Email já cadastrado'
             return render_template('login.html', dic = Pessoa.dicionario, erro = e)
@@ -93,6 +98,13 @@ def conta():
         else:
             request.form['email'] = Pessoa(nomepessoa, email, senha)
             request.form['email'].Salvar_Pessoa()
+            PETinder.put(point="/Pessoas",data=Pessoa.dicionario)
+            PETinder.put(point="/Caes_BR",data=CaesBR.dicionariocaosex)
+            PETinder.put(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
+            PETinder.put(point="/ListadogBR",data=dogBR)
+            PETinder.put(point="/ListadogDoar",data=dogDoar)
+            PETinder.put(point="/ListaEMAIL",data=EMAIL)
+
     
     return render_template('login.html', erro = '')
     
@@ -108,8 +120,17 @@ def cadastro():
         cidade = request.form['cidade']
         request.form['nome'] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
         request.form['nome'].Salvar_CaesBR()
+        
+    PETinder.put(point="/Pessoas",data=Pessoa.dicionario)
+    PETinder.put(point="/Caes_BR",data=CaesBR.dicionariocaosex)
+    PETinder.put(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
+    PETinder.put(point="/ListadogBR",data=dogBR)
+    PETinder.put(point="/ListadogDoar",data=dogDoar)
+    PETinder.put(point="/ListaEMAIL",data=EMAIL)
     
     return render_template('cadastro.html', erro = '')
+    
+    
     
 @app.route('/caddoar', methods=['POST','GET'])
 def caddoar():
@@ -123,6 +144,13 @@ def caddoar():
         cidade = request.form['cidade']
         request.form['nome'] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
         request.form['nome'].Salvar_CaesDoar()
+        
+    PETinder.put(point="/Pessoas",data=Pessoa.dicionario)
+    PETinder.put(point="/Caes_BR",data=CaesBR.dicionariocaosex)
+    PETinder.put(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
+    PETinder.put(point="/ListadogBR",data=dogBR)
+    PETinder.put(point="/ListadogDoar",data=dogDoar)
+    PETinder.put(point="/ListaEMAIL",data=EMAIL)
     
     return render_template('caddoar.html', erro = '')
         
@@ -132,6 +160,7 @@ def home():
     
 @app.route('/perfil')
 def perfil():
+    PETinder.get(point="/Pessoas")
     caes = Pessoa.dicionario[Pessoa.email][3]
     #return x
     #Listar_CaesBRA
@@ -140,6 +169,7 @@ def perfil():
     
 @app.route('/doar')
 def doar():
+    PETinder.get(point="/Pessoas")
     caesdoar = Pessoa.dicionario[Pessoa.email][4]
     #return y
     #Listar_CaesDoar
@@ -147,12 +177,6 @@ def doar():
     return render_template('doar.html', y=caesdoar)
     
 
-PETinder.put(point="/Pessoas",data=request.form['email'].dicionario)
-PETinder.put(point="/Caes_BR",data=CaesBR.dicionariocaosex)
-PETinder.put(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
-PETinder.put(point="/ListadogBR",data=dogBR)
-PETinder.put(point="/ListadogDoar",data=dogDoar)
-PETinder.put(point="/ListaEMAIL",data=EMAIL)
 if __name__ == '__main__':
     app.run(debug=True, host= '0.0.0.0', port=5000)
 
