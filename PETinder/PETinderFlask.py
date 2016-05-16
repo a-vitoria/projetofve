@@ -71,14 +71,14 @@ def firstpage():
         PETinder.get(point="/ListaEMAIL")
         if email in EMAIL:
             PETinder.get(point="/Pessoas")
-            if Pessoa.dicionario[Pessoa.email][2] == senha:
-                return render_template('main.html', dic = Pessoa.dicionario)
+            if request.form['email'].dicionario[request.form['email'].email][2] == senha:
+                return render_template('main.html', dic = request.form['email'].dicionario)
             else: 
                 e = 'Senha incorreta'
-                return render_template('main.html', dic = Pessoa.dicionario, erro = e) 
+                return render_template('main.html',dic=request.form['email'].dicionario, erro = e) 
         else:
             e = 'Usuário inválido'
-            return render_template('main.html', dic = Pessoa.dicionario, erro = e)
+            return render_template('main.html',dic=request.form['email'].dicionario, erro = e)
             
     return render_template('main.html', pessoa = Pessoa('','',''))        
 
@@ -92,17 +92,14 @@ def conta():
         PETinder.get(point="/ListaEMAIL")
         if email in EMAIL:
             e = 'Email já cadastrado'
-            return render_template('login.html', dic = Pessoa.dicionario, erro = e)
+            return render_template('login.html',dic=request.form['email'].dicionario, erro = e)
             
         else:
             request.form['email'] = Pessoa(nomepessoa, email, senha)
             request.form['email'].Salvar_Pessoa()
             PETinder.put(point="/Pessoas",data=Pessoa.dicionario)
-            PETinder.put(point="/Caes_BR",data=CaesBR.dicionariocaosex)
-            PETinder.put(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
-            PETinder.put(point="/ListadogBR",data=dogBR)
-            PETinder.put(point="/ListadogDoar",data=dogDoar)
             PETinder.put(point="/ListaEMAIL",data=EMAIL)
+            return render_template('login.html', erro = '')
 
     
     return render_template('login.html', erro = '')
