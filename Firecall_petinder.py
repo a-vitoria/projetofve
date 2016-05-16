@@ -26,8 +26,6 @@ class Pessoa():
         return self.dicionario
         
 
-        
-
 class Caes():
     
     def __init__(self, nome, sexo, raca, cor, idade, saude, cidade):
@@ -38,7 +36,7 @@ class Caes():
         self.idade = idade
         self.saude = saude
         self.cidade = cidade
-        self.email=Eduardo.email
+        self.email=Pessoa.email
         self.dicionariocaosex={}
         self.dicionariocaodoa={}
         
@@ -48,8 +46,8 @@ class CaesBR(Caes):
         Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
     
     def Salvar_CaesBR(self):
-        self.dicionariocaosex[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Eduardo.email
-        Eduardo.dicionario[Eduardo.email][3].append(self.email)
+        self.dicionariocaosex[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.email
+        Pessoa.dicionario[Pessoa.email][3].append(self.email)
         dogBR.append(self.nome)        
         return self.dicionariocaosex
 #    def Listar_CaesBR(self):
@@ -67,16 +65,16 @@ class CaesDoar(Caes):
 #    def Listar_CaesDoar(self):
         
 
-Eduardo=Pessoa("Eduardo","edu.tirta@gmail.com","0000")
-Eduardo.Salvar_Pessoa()
+#Pessoa=Pessoa("Pessoa","edu.tirta@gmail.com","0000")
+#Pessoa.Salvar_Pessoa()
 
-Lucas=CaesBR("Lucas","Masculino","York","Preto","14","Castrado","Mogi")
-Lucas.Salvar_CaesBR()
+#Lucas=CaesBR("Lucas","Masculino","York","Preto","14","Castrado","Mogi")
+#Lucas.Salvar_CaesBR()
 
 
-PETinder.put(point="/Pessoas",data=Eduardo.dicionario)
-PETinder.put(point="/Caes_BR",data=Lucas.dicionariocaosex)
-PETinder.put(point="/Caes_Doar",data=Lucas.dicionariocaodoa)
+PETinder.put(point="/Pessoas",data=Pessoa.dicionario)
+PETinder.put(point="/Caes_BR",data=CaesBR.dicionariocaosex)
+PETinder.put(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
 PETinder.put(point="/ListadogBR",data=dogBR)
 PETinder.put(point="/ListadogDoar",data=dogDoar)
 PETinder.put(point="/ListaEMAIL",data=EMAIL)
