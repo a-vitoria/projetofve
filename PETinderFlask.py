@@ -6,6 +6,7 @@ PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
 dogBR=[]
 dogDoar=[]
 EMAIL=[]
+
 class Pessoa():
     
     def __init__(self, nomepessoa, email, senha):
@@ -44,7 +45,7 @@ class CaesBR(Caes):
     def Salvar_CaesBR(self):
         self.dicionariocaosex[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.email
         Pessoa.dicionario[Pessoa.email][3].append(self.email)
-        dogBR.append(self.nome)        
+        dogBR.append(self.nome)
         return self.dicionariocaosex
 #    def Listar_CaesBR(self):
         
@@ -79,6 +80,7 @@ def firstpage():
             e = 'Usuário inválido'
             return render_template('main.html', dic = Pessoa.dicionario, erro = e)
             
+    return render_template('main.html', pessoa = Pessoa('','',''))        
 
     
 @app.route('/login', methods=['POST','GET'])
