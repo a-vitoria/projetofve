@@ -75,19 +75,10 @@ def firstpage():
                 return render_template('main.html', dic = request.form['email'].dicionario)
             else: 
                 e = 'Senha incorreta'
-<<<<<<< HEAD
+                
                 return render_template('main.html',dic=request.form['email'].dicionario, erro = e) 
-        else:
-            e = 'Usuário inválido'
-            return render_template('main.html',dic=request.form['email'].dicionario, erro = e)
-=======
-                return render_template('main.html', dic = request.form['email'].dicionario, erro = e) 
-        else:
-            e = 'Usuário inválido'
-            return render_template('main.html', dic = request.form['email'].dicionario, erro = e)
->>>>>>> 696a21cb2a466f62aec10c965dc37e1b67d656ec
-            
-    return render_template('main.html', pessoa = Pessoa('','',''))        
+
+    return render_template('main.html', dic = request.form['email'].dicionario, erro = e)     
 
     
 @app.route('/login', methods=['POST','GET'])
@@ -99,11 +90,8 @@ def conta():
         PETinder.get(point="/ListaEMAIL")
         if email in EMAIL:
             e = 'Email já cadastrado'
-<<<<<<< HEAD
             return render_template('login.html',dic=request.form['email'].dicionario, erro = e)
-=======
-            return render_template('login.html', dic = request.form['email'].dicionario, erro = e)
->>>>>>> 696a21cb2a466f62aec10c965dc37e1b67d656ec
+
             
         else:
             request.form['email'] = Pessoa(nomepessoa, email, senha)
