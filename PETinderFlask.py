@@ -59,9 +59,6 @@ class CaesDoar(Caes):
         dogDoar.append(self.nome)
         return self.dicionariocaodoa
 #    def Listar_CaesDoar(self):
-        
-
-
 
 app = Flask(__name__, static_url_path='')
 
@@ -74,13 +71,13 @@ def firstpage():
         if email in EMAIL:
             PETinder.get(point="/Pessoas")
             if Pessoa.dicionario[Pessoa.email][2] == senha:
-                return render_template('1.html', dic = Pessoa.dicionario)
+                return render_template('main.html', dic = Pessoa.dicionario)
             else: 
                 e = 'Senha incorreta'
-                return render_template('1.html', dic = Pessoa.dicionario, erro = e) 
+                return render_template('main.html', dic = Pessoa.dicionario, erro = e) 
         else:
             e = 'Usuário inválido'
-            return render_template('1.html', dic = Pessoa.dicionario, erro = e)
+            return render_template('main.html', dic = Pessoa.dicionario, erro = e)
             
 
     
