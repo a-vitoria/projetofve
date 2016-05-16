@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 
 import firecall
-
+#
 PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
 dogBR=[]
 dogDoar=[]
@@ -17,10 +17,11 @@ class Pessoa():
         self.caodoa=[]
         
     def Salvar_Pessoa(self):
-        self.dicionario[self.email]=self.nomepessoa,self.email,self.senha,self.dogBR,self.dogDoar
+        self.dicionario[self.email]=self.nomepessoa,self.email,self.senha,self.caosex,self.caodoa
         EMAIL.append(self.email)        
         return self.dicionario
         
+
 class Caes():
     
     def __init__(self, nome, sexo, raca, cor, idade, saude, cidade):
@@ -31,7 +32,7 @@ class Caes():
         self.idade = idade
         self.saude = saude
         self.cidade = cidade
-        self.email=Eduardo.email
+        self.email=Pessoa.email
         self.dicionariocaosex={}
         self.dicionariocaodoa={}
         
@@ -41,8 +42,8 @@ class CaesBR(Caes):
         Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
     
     def Salvar_CaesBR(self):
-        self.dicionariocaosex[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Eduardo.email
-        Eduardo.dicionario[Eduardo.email][3].append(self.email)
+        self.dicionariocaosex[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.email
+        Pessoa.dicionario[Pessoa.email][3].append(self.email)
         dogBR.append(self.nome)        
         return self.dicionariocaosex
 #    def Listar_CaesBR(self):
@@ -60,19 +61,6 @@ class CaesDoar(Caes):
 #    def Listar_CaesDoar(self):
         
 
-Eduardo=Pessoa("Eduardo","edu.tirta@gmail.com","0000")
-Eduardo.Salvar_Pessoa()
-
-Lucas=CaesBR("Lucas","Masculino","York","Preto","14","Castrado","Mogi")
-Lucas.Salvar_CaesBR()
-
-
-PETinder.put(point="/Pessoas",data=Eduardo.dicionario)
-PETinder.put(point="/Caes_BR",data=Lucas.dicionariocaosex)
-PETinder.put(point="/Caes_Doar",data=Lucas.dicionariocaodoa)
-PETinder.put(point="/ListadogBR",data=dogBR)
-PETinder.put(point="/ListadogDoar",data=dogDoar)
-PETinder.put(point="/ListaEMAIL",data=EMAIL)
 
 
 app = Flask(__name__, static_url_path='')
@@ -144,20 +132,27 @@ def home():
     
 @app.route('/perfil')
 def perfil():
-    x = Pessoa.dicionario[Pessoa.email][3]
+    caes = Pessoa.dicionario[Pessoa.email][3]
     #return x
-    #Listar_CaesBR
+    #Listar_CaesBRA
     #página que mostrará os cães cadastrados pelo usuário
-    return render_template('perfil.html', x)
+    return render_template('perfil.html', x=caes)
     
 @app.route('/doar')
 def doar():
-    y = Pessoa.dicionario[Pessoa.email][4]
+    caesdoar = Pessoa.dicionario[Pessoa.email][4]
     #return y
     #Listar_CaesDoar
     #página que mostrará os animais cadastrados pelo usuário para doação
-    return render_template('doar.html', y)
+    return render_template('doar.html', y=caesdoar)
     
+
+PETinder.put(point="/Pessoas",data=request.form['email'].dicionario)
+PETinder.put(point="/Caes_BR",data=CaesBR.dicionariocaosex)
+PETinder.put(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
+PETinder.put(point="/ListadogBR",data=dogBR)
+PETinder.put(point="/ListadogDoar",data=dogDoar)
+PETinder.put(point="/ListaEMAIL",data=EMAIL)
 if __name__ == '__main__':
     app.run(debug=True, host= '0.0.0.0', port=5000)
 
