@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, redirect
 
 import firecall
 #
@@ -85,8 +85,9 @@ def firstpage():
     if request.method == 'POST':
         email = request.form['email']
         senha = request.form['senha']
-        L = eval(PETinder.get_sync(point="/ListaEMAIL/{0}".format(email)))
-        if email == L:
+        L = eval(PETinder.get_sync(point="/ListaEMAIL"))
+        print (L)
+        if email in L:
             listasenha=[]
             s= eval(PETinder.get_sync(point="/Pessoas/{0}/senha".format(email)))
             listasenha.append(s)
@@ -174,23 +175,24 @@ def caddoar():
         
 @app.route('/home', methods=['POST', 'GET'])
 def home():
-    botao=request.form['button']
+    botao=request.args['button']
     if request.method == 'GET':
         if botao == "parceiro":
-            return render_template('perfil.html')
+            return redirect(url_for('perfil'))
         
         elif botao == "doar":
-            return render_template('doar.html')
+            return redirect(url_for('doar'))
         
         elif botao == "adotar":
-            return render_template('adotar.html')
+            return redirect(url_for('adotar'))
             
     return render_template('home.html')
         
 @app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
-    a= PETinder.get_sync(point="/Pessoas/{0}/3/0".format(request.form['email']))
-    caes = a
+    if request.method == 'GET':
+        a= eval(PETinder.get_sync(point="/Pessoas/{0}/caesBR".format(request.form['email'])))
+        caes = a
     #return x
     #Listar_CaesBRA
     #página que mostrará os cães cadastrados pelo usuário
@@ -198,7 +200,7 @@ def perfil():
     
 @app.route('/doar', methods=['POST', 'GET'])
 def doar():
-    b= PETinder.get_sync(point="/Pessoas/{0}/4/0".format(request.form['email']))
+    b= eval(PETinder.get_sync(point="/Pessoas/{0}/caesDoar".format(request.form['email'])))
     caesdoar = b
     #return y
     #Listar_CaesDoar
