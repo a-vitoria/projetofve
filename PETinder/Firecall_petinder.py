@@ -20,6 +20,7 @@ class Pessoa():
         self.caosex=[]
         self.caodoa=[]
         
+        
     def Salvar_Pessoa(self):
         self.dicionario[self.email]=self.nomepessoa,self.email,self.senha,self.caosex,self.caodoa
         EMAIL.append(self.email)        

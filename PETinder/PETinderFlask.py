@@ -18,14 +18,20 @@ class Pessoa():
         self.caodoa=[]
         
     def Salvar_Pessoa(self):
-        self.dicionario[self.email]=self.nomepessoa,self.email,self.senha,self.caosex,self.caodoa
-        EMAIL.append(self.email)        
-        return self.dicionario
+        self.dicionario["email"]=self.email
+        self.dicionario["nomepessoa"]=self.nomepessoa
+        self.dicionario["senha"]=self.senha
+        self.dicionario["caesBR"]=self.caosex
+        self.dicionario["caesDoar"]=self.caodoa
+           
+        PETinder.put_sync(point="/Pessoas/{0}".format(self.email),data=self.dicionario)
+        
+        
         
 
 class Caes():
     
-    def __init__(self, nome, sexo, raca, cor, idade, saude, cidade,objeto):
+    def __init__(self, nome, sexo, raca, cor, idade, saude, cidade):
         self.nome = nome
         self.sexo = sexo
         self.raca = raca
@@ -33,30 +39,41 @@ class Caes():
         self.idade = idade
         self.saude = saude
         self.cidade = cidade
-        self.email=objeto.email
         self.dicionariocaosex={}
         self.dicionariocaodoa={}
         
         
 class CaesBR(Caes):
-    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade,objeto):
-        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade,objeto)
+    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade):
+        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
     
     def Salvar_CaesBR(self,objeto):
-        self.dicionariocaosex[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.email
-        objeto.dicionario[objeto.email][3].append(self.email)
+        self.dicionariocaosex["nome"]=self.nome
+        self.dicionariocaosex["sexo"]=self.sexo
+        self.dicionariocaosex["raca"]=self.raca
+        self.dicionariocaosex["cor"]=self.cor
+        self.dicionariocaosex["idade"]=self.idade
+        self.dicionariocaosex["saude"]=self.saude
+        self.dicionariocaosex["cidade"]=self.cidade
+        self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/dicionario/email".format(request.form['email'])))
         dogBR.append(self.nome)
         return self.dicionariocaosex
 #    def Listar_CaesBR(self):
         
         
 class CaesDoar(Caes):
-    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade,objeto):
-        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade,objeto)
+    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade):
+        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
 
     def Salvar_CaesDoar(self,objeto):
-        self.dicionariocaodoa[self.nome]=self.nome,self.sexo,self.raca,self.cor,self.idade,self.saude,self.cidade,Pessoa.email
-        (objeto.email).dicionario[objeto.email][4].append(self.email)
+        self.dicionariocaodoa["nome"]=self.nome
+        self.dicionariocaodoa["sexo"]=self.sexo
+        self.dicionariocaodoa["raca"]=self.raca
+        self.dicionariocaodoa["cor"]=self.cor
+        self.dicionariocaodoa["idade"]=self.idade
+        self.dicionariocaodoa["saude"]=self.saude
+        self.dicionariocaodoa["cidade"]=self.cidade
+        self.dicionariocaodoa["email"]=PETinder.get_sync(point="/Pessoas/{0}/dicionario/email".format(request.form['email']))
         dogDoar.append(self.nome)
         return self.dicionariocaodoa
 #    def Listar_CaesDoar(self):
@@ -68,17 +85,19 @@ def firstpage():
     if request.method == 'POST':
         email = request.form['email']
         senha = request.form['senha']
-        PETinder.get(point="/ListaEMAIL")
-        if email in EMAIL:
-            PETinder.get(point="/Pessoas")
-            if request.form['email'].dicionario[request.form['email'].email][2] == senha:
-                return render_template('main.html', dic = request.form['email'].dicionario)
+        L = eval(PETinder.get_sync(point="/ListaEMAIL/{0}".format(email)))
+        if email == L:
+            listasenha=[]
+            s= eval(PETinder.get_sync(point="/Pessoas/{0}/senha".format(email)))
+            listasenha.append(s)
+            if senha in listasenha:
+                return render_template('home.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)))
             else: 
                 e = 'Senha incorreta'
-                return render_template('main.html', dic = request.form['email'].dicionario, erro = e) 
+                return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e) 
         else:
             e = 'Usuário inválido'
-            return render_template('main.html', dic = request.form['email'].dicionario, erro = e)
+            return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
             
     return render_template('main.html', pessoa = Pessoa('','',''))        
 
@@ -89,21 +108,19 @@ def conta():
         nomepessoa = request.form['nomepessoa']
         email = request.form['email']
         senha = request.form['senha']
-        PETinder.get(point="/ListaEMAIL")
-        if email in EMAIL:
+        ema= (PETinder.get_sync(point="/ListaEMAIL/{0}".format(email)))
+        if email == ema:
             e = 'Email já cadastrado'
-            return render_template('login.html', dic = request.form['email'].dicionario, erro = e)
-            
+            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
+        elif email == "":
+            e = 'O campo Email está vazio'
+            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
         else:
-            request.form['email'] = Pessoa(nomepessoa, email, senha)
-            request.form['email'].Salvar_Pessoa()
-            PETinder.put(point="/Pessoas",data=Pessoa.dicionario)
-            PETinder.put(point="/Caes_BR",data=CaesBR.dicionariocaosex)
-            PETinder.put(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
-            PETinder.put(point="/ListadogBR",data=dogBR)
-            PETinder.put(point="/ListadogDoar",data=dogDoar)
-            PETinder.put(point="/ListaEMAIL",data=EMAIL)
-
+            EMAIL.append(email)
+            EMAIL[-1] = Pessoa(nomepessoa, email, senha)
+            EMAIL[-1].Salvar_Pessoa() 
+            PETinder.put_sync(point="/ListaEMAIL/{0}".format(email),data=email)                
+            return render_template('home.html', dic = EMAIL[-1].dicionario)
     
     return render_template('login.html', erro = '')
     
@@ -120,13 +137,13 @@ def cadastro():
         request.form['nome'] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
         request.form['nome'].Salvar_CaesBR()
         
-    PETinder.put(point="/Pessoas",data=Pessoa.dicionario)
-    PETinder.put(point="/Caes_BR",data=CaesBR.dicionariocaosex)
-    PETinder.put(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
-    PETinder.put(point="/ListadogBR",data=dogBR)
-    PETinder.put(point="/ListadogDoar",data=dogDoar)
-    PETinder.put(point="/ListaEMAIL",data=EMAIL)
-    
+#    PETinder.put_sync(point="/Pessoas",data=Pessoa.dicionario)
+#    PETinder.put_sync(point="/Caes_BR",data=request.form['nome'].dicionariocaosex)
+#    PETinder.put_sync(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
+#    PETinder.put_sync(point="/ListadogBR",data=dogBR)
+#    PETinder.put_sync(point="/ListadogDoar",data=dogDoar)
+#    PETinder.put_sync(point="/ListaEMAIL",data=EMAIL)
+#    
     return render_template('cadastro.html', erro = '')
     
     
@@ -144,32 +161,43 @@ def caddoar():
         request.form['nome'] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
         request.form['nome'].Salvar_CaesDoar()
         
-    PETinder.put(point="/Pessoas",data=Pessoa.dicionario)
-    PETinder.put(point="/Caes_BR",data=CaesBR.dicionariocaosex)
-    PETinder.put(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
-    PETinder.put(point="/ListadogBR",data=dogBR)
-    PETinder.put(point="/ListadogDoar",data=dogDoar)
-    PETinder.put(point="/ListaEMAIL",data=EMAIL)
+    PETinder.put_sync(point="/Pessoas",data=Pessoa.dicionario)
+    PETinder.put_sync(point="/Caes_BR",data=CaesBR.dicionariocaosex)
+    PETinder.put_sync(point="/Caes_Doar",data=request.form['nome'].dicionariocaodoa)
+    PETinder.put_sync(point="/ListadogBR",data=dogBR)
+    PETinder.put_sync(point="/ListadogDoar",data=dogDoar)
+    PETinder.put_sync(point="/ListaEMAIL",data=EMAIL)
     
     return render_template('caddoar.html', erro = '')
         
-@app.route('/home')
+@app.route('/home', methods=['POST', 'GET'])
 def home():
+    botao=request.form['button']
+    if request.method == 'GET':
+        if botao == "parceiro":
+            return render_template('perfil.html')
+        
+        elif botao == "doar":
+            return render_template('doar.html')
+        
+        elif botao == "adotar":
+            return render_template('adotar.html')
+            
     return render_template('home.html')
-    
-@app.route('/perfil')
+        
+@app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
-    PETinder.get(point="/Pessoas")
-    caes = Pessoa.dicionario[Pessoa.email][3]
+    a= PETinder.get_sync(point="/Pessoas/{0}/3/0".format(request.form['email']))
+    caes = a
     #return x
     #Listar_CaesBRA
     #página que mostrará os cães cadastrados pelo usuário
     return render_template('perfil.html', x=caes)
     
-@app.route('/doar')
+@app.route('/doar', methods=['POST', 'GET'])
 def doar():
-    PETinder.get(point="/Pessoas")
-    caesdoar = Pessoa.dicionario[Pessoa.email][4]
+    b= PETinder.get_sync(point="/Pessoas/{0}/4/0".format(request.form['email']))
+    caesdoar = b
     #return y
     #Listar_CaesDoar
     #página que mostrará os animais cadastrados pelo usuário para doação
@@ -177,8 +205,5 @@ def doar():
     
 
 if __name__ == '__main__':
-    app.run(debug=True, host= '0.0.0.0', port=5000)
-
-    
-    
+    app.run(debug=True, host= '0.0.0.0', port=5000)    
     

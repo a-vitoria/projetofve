@@ -22,10 +22,10 @@
 <div style="border:10px; border-style:solid; border-color:orange; padding: 1em;">
 <center>
 <img src="cadastro.png"/></center>
-<form class="vertical" method="POST" action="./perfil">
+<form class="vertical" method="POST" action="/perfil">
 <br><label for="nome"><strong><h6><font color="orange">Nome</font></strong></h6></label>
 </br>
-<input id="nome" type="text" placeholder="Ex: Rex" />
+<input name="nome" id="nome" type="text" placeholder="Ex: Rex" />
 <br></br>
 <form action="upload.php" method="post" enctype="multipart/form-data"><strong><h6><font color="orange">Insira uma foto do seu PET:</font></strong></h6>
 <input type="file" name="Escolher arquivo" id="foto">
@@ -33,11 +33,11 @@
 </form>
 <br><label for="raca"><strong><h6><font color="orange">Raça</font></strong></h6></label>
 </br>
-<input id="raca" type="text" placeholder="Ex: Labrador" />
+<input name="raca" id="raca" type="text" placeholder="Ex: Labrador" />
 <br></br>
 <br><label for="sexo"><strong><h6><font color="orange">Sexo</font></strong></h6></label>
 </br>
-<select id="sexo">
+<select name="sexo" id="sexo">
 <option value="0">-- Escolha --</option>
 <option value="1">Masculino</option>
 <option value="2">Feminino</option>
@@ -45,20 +45,20 @@
 <br></br>
 <br><label for="cidade"><strong><h6><font color="orange">Cidade</font></strong></h6></label>
 </br>
-<input id="cidade" type="text" placeholder="Ex: São Paulo" />
+<input name="cidade" id="cidade" type="text" placeholder="Ex: São Paulo" />
 <br></br>
 <br><label for="idade"><strong><h6><font color="orange">Idade</font></strong></h6></label>
 </br>
-<input id="idade" type="text" placeholder="Ex: 3" />
+<input name="idade" id="idade" type="text" placeholder="Ex: 3" />
 <br></br>
 <br><label for="cor"><strong><h6><font color="orange">Cor</font></strong></h6></label>
 </br>
-<input id="cor" type="text" placeholder="Ex: Branco" />
+<input name="cor" id="cor" type="text" placeholder="Ex: Branco" />
 <br></br>
 <br><label for="saude"><strong><h6><font color="orange">Situação de saúde</font></strong></h6></label>
 </br>
 <br></br>
-<textarea id="saude" placeholder="Cite aqui se o seu PET tiver alguma doença hereditária ou sofrer de algum problema de saúde crônico"></textarea>
+<textarea name="saude" id="saude" placeholder="Cite aqui se o seu PET tiver alguma doença hereditária ou sofrer de algum problema de saúde crônico"></textarea>
 <br></br>
 <div align="right"><button class="button orange"><i class="large"><i class="pill"><i class="fa fa-paw"></i></i></i> Cadastrar</button>
 </form></div></div></div></div>
