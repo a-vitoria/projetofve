@@ -94,10 +94,24 @@ def firstpage():
                 return render_template('home.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)))
             else: 
                 e = 'Senha incorreta'
+<<<<<<< HEAD
                 return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e) 
         else:
             e = 'Usuário inválido'
             return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
+=======
+<<<<<<< HEAD
+                return render_template('main.html',dic=request.form['email'].dicionario, erro = e) 
+        else:
+            e = 'Usuário inválido'
+            return render_template('main.html',dic=request.form['email'].dicionario, erro = e)
+=======
+                return render_template('main.html', dic = request.form['email'].dicionario, erro = e) 
+        else:
+            e = 'Usuário inválido'
+            return render_template('main.html', dic = request.form['email'].dicionario, erro = e)
+>>>>>>> 696a21cb2a466f62aec10c965dc37e1b67d656ec
+>>>>>>> origin/master
             
     return render_template('main.html', pessoa = Pessoa('','',''))        
 
@@ -111,6 +125,7 @@ def conta():
         ema= (PETinder.get_sync(point="/ListaEMAIL/{0}".format(email)))
         if email == ema:
             e = 'Email já cadastrado'
+<<<<<<< HEAD
             return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
         elif email == "":
             e = 'O campo Email está vazio'
@@ -121,6 +136,21 @@ def conta():
             EMAIL[-1].Salvar_Pessoa() 
             PETinder.put_sync(point="/ListaEMAIL/{0}".format(email),data=email)                
             return render_template('home.html', dic = EMAIL[-1].dicionario)
+=======
+<<<<<<< HEAD
+            return render_template('login.html',dic=request.form['email'].dicionario, erro = e)
+=======
+            return render_template('login.html', dic = request.form['email'].dicionario, erro = e)
+>>>>>>> 696a21cb2a466f62aec10c965dc37e1b67d656ec
+            
+        else:
+            request.form['email'] = Pessoa(nomepessoa, email, senha)
+            request.form['email'].Salvar_Pessoa()
+            PETinder.put(point="/Pessoas",data=Pessoa.dicionario)
+            PETinder.put(point="/ListaEMAIL",data=EMAIL)
+            return render_template('login.html', erro = '')
+
+>>>>>>> origin/master
     
     return render_template('login.html', erro = '')
     
