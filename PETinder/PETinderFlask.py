@@ -82,6 +82,7 @@ app = Flask(__name__, static_url_path='')
 
 @app.route('/', methods=['POST','GET'])
 def firstpage():
+    
     if request.method == 'POST':
         email = request.form['email']
         senha = request.form['senha']
@@ -100,7 +101,7 @@ def firstpage():
         else:
             e = 'Usuário inválido'
             return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
-
+    el=request.args['email']
     return render_template('main.html', pessoa = Pessoa('','',''))        
 
     
@@ -124,7 +125,7 @@ def conta():
             EMAIL[-1].Salvar_Pessoa() 
             PETinder.put_sync(point="/ListaEMAIL/{0}".format(email),data=email)                
             return render_template('home.html', dic = EMAIL[-1].dicionario)
- 
+    el=request.args['email']
     return render_template('login.html', erro = '')
     
 @app.route('/cadastro', methods=['POST','GET'])
@@ -165,16 +166,13 @@ def caddoar():
         request.form['nome'].Salvar_CaesDoar()
         
     PETinder.put_sync(point="/Pessoas",data=Pessoa.dicionario)
-    PETinder.put_sync(point="/Caes_BR",data=CaesBR.dicionariocaosex)
     PETinder.put_sync(point="/Caes_Doar",data=request.form['nome'].dicionariocaodoa)
-    PETinder.put_sync(point="/ListadogBR",data=dogBR)
-    PETinder.put_sync(point="/ListadogDoar",data=dogDoar)
-    PETinder.put_sync(point="/ListaEMAIL",data=EMAIL)
-    
+    PETinder.put_sync(point="/ListadogDoar",data=dogDoar)    
     return render_template('caddoar.html', erro = '')
         
 @app.route('/home', methods=['POST', 'GET'])
 def home():
+    el=request.args['email']
     botao=request.args['button']
     if request.method == 'GET':
         if botao == "parceiro":
@@ -190,8 +188,9 @@ def home():
         
 @app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
+    el = request.args['email']
     if request.method == 'GET':
-        a= eval(PETinder.get_sync(point="/Pessoas/{0}/caesBR".format(request.form['email'])))
+        a= eval(PETinder.get_sync(point="/Pessoas/{0}/caesBR".format(el)))
         caes = a
     #return x
     #Listar_CaesBRA
@@ -200,7 +199,8 @@ def perfil():
     
 @app.route('/doar', methods=['POST', 'GET'])
 def doar():
-    b= eval(PETinder.get_sync(point="/Pessoas/{0}/caesDoar".format(request.form['email'])))
+    el = request.args['email']
+    b= eval(PETinder.get_sync(point="/Pessoas/{0}/caesDoar".format(el)))
     caesdoar = b
     #return y
     #Listar_CaesDoar
