@@ -87,7 +87,6 @@ def firstpage():
         email = request.form['email']
         senha = request.form['senha']
         L = eval(PETinder.get_sync(point="/ListaEMAIL"))
-        print (L)
         if email in L:
             listasenha=[]
             s= eval(PETinder.get_sync(point="/Pessoas/{0}/senha".format(email)))
@@ -101,7 +100,7 @@ def firstpage():
         else:
             e = 'Usuário inválido'
             return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
-    el=request.args['email']
+#    el=request.args['email']
     return render_template('main.html', pessoa = Pessoa('','',''))        
 
     
@@ -111,8 +110,8 @@ def conta():
         nomepessoa = request.form['nomepessoa']
         email = request.form['email']
         senha = request.form['senha']
-        ema= (PETinder.get_sync(point="/ListaEMAIL/{0}".format(email)))
-        if email == ema:
+        ema= eval(PETinder.get_sync(point="/ListaEMAIL"))
+        if email in ema:
             e = 'Email já cadastrado'
 
             return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
@@ -125,7 +124,7 @@ def conta():
             EMAIL[-1].Salvar_Pessoa() 
             PETinder.put_sync(point="/ListaEMAIL/{0}".format(email),data=email)                
             return render_template('home.html', dic = EMAIL[-1].dicionario)
-    el=request.args['email']
+#    el=request.args['email']
     return render_template('login.html', erro = '')
     
 @app.route('/cadastro', methods=['POST','GET'])
@@ -172,7 +171,7 @@ def caddoar():
         
 @app.route('/home', methods=['POST', 'GET'])
 def home():
-    el=request.args['email']
+#    el=request.args['email']
     botao=request.args['button']
     if request.method == 'GET':
         if botao == "parceiro":
