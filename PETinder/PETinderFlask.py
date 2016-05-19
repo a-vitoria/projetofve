@@ -92,7 +92,7 @@ def firstpage():
             s= eval(PETinder.get_sync(point="/Pessoas/{0}/senha".format(email)))
             listasenha.append(s)
             if senha in listasenha:
-                return render_template('home.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)))
+                return render_template('home.html', email=email, dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)))
             else: 
                 e = 'Senha incorreta'
                 
@@ -171,11 +171,11 @@ def caddoar():
         
 @app.route('/home', methods=['POST', 'GET'])
 def home():
-#    el=request.args['email']
+    el=request.args['email']
     botao=request.args['button']
     if request.method == 'GET':
         if botao == "parceiro":
-            return redirect(url_for('perfil'))
+            return redirect(url_for('perfil', email=el))
         
         elif botao == "doar":
             return redirect(url_for('doar'))
@@ -188,6 +188,7 @@ def home():
 @app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
     el = request.args['email']
+    print(el)    
     if request.method == 'GET':
         a= eval(PETinder.get_sync(point="/Pessoas/{0}/caesBR".format(el)))
         caes = a
