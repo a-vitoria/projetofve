@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, session
 
 import firecall
 #
@@ -80,9 +80,18 @@ class CaesDoar(Caes):
 
 app = Flask(__name__, static_url_path='')
 
+app.secret_key="sorvete"
+
+def sumSessionCounter():
+    try:
+        session['counter']+=1
+    except KeyError:
+        session['counter']=1
+
 @app.route('/', methods=['POST','GET'])
 def firstpage():
     
+    sumSessionCounter()    
     if request.method == 'POST':
         email = request.form['email']
         senha = request.form['senha']
@@ -100,12 +109,13 @@ def firstpage():
         else:
             e = 'Usuário inválido'
             return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
-#    el=request.args['email']
+
     return render_template('main.html', pessoa = Pessoa('','',''))        
 
     
 @app.route('/login', methods=['POST','GET'])
 def conta():
+    sumSessionCounter()
     if request.method == 'POST':
         nomepessoa = request.form['nomepessoa']
         email = request.form['email']
@@ -125,10 +135,15 @@ def conta():
             PETinder.put_sync(point="/ListaEMAIL/{0}".format(email),data=email)                
             return render_template('home.html', dic = EMAIL[-1].dicionario)
 #    el=request.args['email']
+    if request.args.get('email'):
+        session['email'] = request.args.get('email')
+    else:
+        return render_template('login.html', session=session)
     return render_template('login.html', erro = '')
     
 @app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
+    sumSessionCounter()
     if request.method == 'POST':
         nome = request.form['nome']
         raca = request.form['raca']
@@ -146,7 +161,10 @@ def cadastro():
 #    PETinder.put_sync(point="/ListadogBR",data=dogBR)
 #    PETinder.put_sync(point="/ListadogDoar",data=dogDoar)
 #    PETinder.put_sync(point="/ListaEMAIL",data=EMAIL)
-#    
+    if request.args.get('email'):
+        session['email'] = request.args.get('email')
+    else:
+        return render_template('cadastro.html', session=session)
     return render_template('cadastro.html', erro = '')
     
     
@@ -171,6 +189,7 @@ def caddoar():
         
 @app.route('/home', methods=['POST', 'GET'])
 def home():
+    sumSessionCounter()
     el=request.args['email']
     botao=request.args['button']
     if request.method == 'GET':
@@ -187,6 +206,7 @@ def home():
         
 @app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
+    session['counter'] = session['counter'] + 1
     el = request.args['email']
     print(el)    
     if request.method == 'GET':
