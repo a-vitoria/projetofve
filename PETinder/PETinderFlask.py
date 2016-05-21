@@ -28,7 +28,6 @@ class Pessoa():
         PETinder.put_sync(point="/Pessoas/{0}".format(self.email),data=self.dicionario)
         
         
-        
 
 class Caes():
     
@@ -59,8 +58,8 @@ class CaesBR(Caes):
         self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/dicionario/email".format(request.form['email'])))
         dogBR.append(self.nome)
         return self.dicionariocaosex
-        PETinder.put_sync(point="/Pessoas/{0}/caesBR".format("a"),data=nome)
-        PETinder.put_sync(point="/Pessoas/{0}/Caes_BR".format("a"),data=nome)
+        PETinder.put_sync(point="/Pessoas/{0}/caesBR".format("a"),data=self.nome)
+        PETinder.put_sync(point="/Pessoas/{0}/Caes_BR".format("a"),data=self.nome)
 #    def Listar_CaesBR(self):
         
         
@@ -132,7 +131,9 @@ def conta():
     
 @app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
+    print('1')
     if request.method == 'POST':
+        print('2')
         nome = request.form['nome']
         raca = request.form['raca']
         sexo = request.form['sexo']
@@ -191,8 +192,8 @@ def perfil():
     if request.method == 'POST':
         a= eval(PETinder.get_sync(point="/Pessoas/{0}/caesBR".format(el)))
         caes = a
-    #return x
-    #Listar_CaesBRA
+
+    #Listar_CaesBR
     #página que mostrará os cães cadastrados pelo usuário
     return redirect(url_for('perfil', x=caes))
     
@@ -201,7 +202,7 @@ def doar():
     el = request.args['email']
     b= eval(PETinder.get_sync(point="/Pessoas/{0}/caesDoar".format(el)))
     caesdoar = b
-    #return y
+
     #Listar_CaesDoar
     #página que mostrará os animais cadastrados pelo usuário para doação
     return render_template('doar.html', y=caesdoar)
