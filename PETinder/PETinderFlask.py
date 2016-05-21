@@ -92,7 +92,7 @@ def firstpage():
             s= eval(PETinder.get_sync(point="/Pessoas/{0}/senha".format(email)))
             listasenha.append(s)
             if senha in listasenha:
-                return render_template('home.html', email=email, dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)))
+                return render_template('home.html', email=email)
             else: 
                 e = 'Senha incorreta'
                 
@@ -140,14 +140,14 @@ def cadastro():
         request.form['nome'] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
         request.form['nome'].Salvar_CaesBR()
         
-#    PETinder.put_sync(point="/Pessoas",data=Pessoa.dicionario)
-#    PETinder.put_sync(point="/Caes_BR",data=request.form['nome'].dicionariocaosex)
+    PETinder.put_sync(point="/Pessoas",data=Pessoa.dicionario)
+    PETinder.put_sync(point="/Caes_BR",data=request.form['nome'].dicionariocaosex)
 #    PETinder.put_sync(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
-#    PETinder.put_sync(point="/ListadogBR",data=dogBR)
+    PETinder.put_sync(point="/ListadogBR",data=dogBR)
 #    PETinder.put_sync(point="/ListadogDoar",data=dogDoar)
 #    PETinder.put_sync(point="/ListaEMAIL",data=EMAIL)
 #    
-    return render_template('cadastro.html', erro = '')
+    return render_template('perfil.html', erro = '')
     
     
     
@@ -171,31 +171,33 @@ def caddoar():
         
 @app.route('/home', methods=['POST', 'GET'])
 def home():
-    el=request.args['email']
-    botao=request.args['button']
+  
+    button=request.args['button']
+    
     if request.method == 'GET':
-        if botao == "parceiro":
-            return redirect(url_for('perfil', email=el))
+        if button == "parceiro":
+            
+            return render_template('perfil.html', email = "a")
         
-        elif botao == "doar":
-            return redirect(url_for('doar'))
+        elif button == "doar":
+            return render_template('doar.html')
         
-        elif botao == "adotar":
+        elif button == "adotar":
             return redirect(url_for('adotar'))
             
     return render_template('home.html')
         
 @app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
-    el = request.args['email']
-    print(el)    
+
+    el = request.args['email']      
     if request.method == 'GET':
         a= eval(PETinder.get_sync(point="/Pessoas/{0}/caesBR".format(el)))
         caes = a
     #return x
     #Listar_CaesBRA
     #página que mostrará os cães cadastrados pelo usuário
-    return render_template('perfil.html', x=caes)
+    return redirect(url_for('cadastro', x=caes))
     
 @app.route('/doar', methods=['POST', 'GET'])
 def doar():
