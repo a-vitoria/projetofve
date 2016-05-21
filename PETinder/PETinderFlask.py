@@ -6,6 +6,7 @@ PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
 dogBR=[]
 dogDoar=[]
 EMAIL=[]
+NOME=[]
 
 class Pessoa():
     
@@ -58,6 +59,8 @@ class CaesBR(Caes):
         self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/dicionario/email".format(request.form['email'])))
         dogBR.append(self.nome)
         return self.dicionariocaosex
+        PETinder.put_sync(point="/Pessoas/{0}/caesBR".format("a"),data=nome)
+        PETinder.put_sync(point="/Pessoas/{0}/Caes_BR".format("a"),data=nome)
 #    def Listar_CaesBR(self):
         
         
@@ -129,6 +132,7 @@ def conta():
     
 @app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
+    print("1")
     if request.method == 'POST':
         nome = request.form['nome']
         raca = request.form['raca']
@@ -137,16 +141,11 @@ def cadastro():
         cor = request.form['cor']
         saude = request.form['saude']
         cidade = request.form['cidade']
-        request.form['nome'] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
-        request.form['nome'].Salvar_CaesBR()
-        
-    PETinder.put_sync(point="/Pessoas",data=Pessoa.dicionario)
-    PETinder.put_sync(point="/Caes_BR",data=request.form['nome'].dicionariocaosex)
-#    PETinder.put_sync(point="/Caes_Doar",data=CaesDoar.dicionariocaodoa)
+        print("2")
+        NOME.append(nome)
+        NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
+        NOME[-1].Salvar_CaesBR()        
     PETinder.put_sync(point="/ListadogBR",data=dogBR)
-#    PETinder.put_sync(point="/ListadogDoar",data=dogDoar)
-#    PETinder.put_sync(point="/ListaEMAIL",data=EMAIL)
-#    
     return render_template('perfil.html', erro = '')
     
     
