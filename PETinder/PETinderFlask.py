@@ -59,8 +59,9 @@ class CaesBR(Caes):
         self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/dicionario/email".format(request.form['email'])))
         dogBR.append(self.nome)
         return self.dicionariocaosex
-        PETinder.put_sync(point="/Pessoas/{0}/caesBR".format("a"),data=nome)
-        PETinder.put_sync(point="/Pessoas/{0}/Caes_BR".format("a"),data=nome)
+        PETinder.put_sync(point="/Pessoas/{0}/caesBR".format("a"),data=self.nome)
+        PETinder.put_sync(point="/Pessoas/{0}/Caes_BR".format("a"),data=self.dicionariocaosex)
+        print("oba")
 #    def Listar_CaesBR(self):
         
         
@@ -132,7 +133,11 @@ def conta():
     
 @app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
-    if request.method == 'POST':
+    
+    print('1')
+
+    if request.method=='POST':
+        print('2')
         nome = request.form['nome']
         raca = request.form['raca']
         sexo = request.form['sexo']
@@ -142,7 +147,7 @@ def cadastro():
         cidade = request.form['cidade']
         NOME.append(nome)
         NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
-        NOME[-1].Salvar_CaesBR()        
+        NOME[-1].Salvar_CaesBR()
     PETinder.put_sync(point="/ListadogBR",data=dogBR)
     return render_template('cadastro.html', erro = '')
     
@@ -186,7 +191,7 @@ def home():
         
 @app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
-
+    print('3')
     el = request.args['email']      
     if request.method == 'POST':
         a= eval(PETinder.get_sync(point="/Pessoas/{0}/caesBR".format(el)))
