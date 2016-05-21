@@ -62,7 +62,10 @@ class CaesBR(Caes):
         PETinder.put_sync(point="/Pessoas/{0}/caesBR".format("a"),data=self.nome)
         PETinder.put_sync(point="/Pessoas/{0}/Caes_BR".format("a"),data=self.dicionariocaosex)
         print("oba")
-#    def Listar_CaesBR(self):
+    def Del_CaesBR(self):
+        
+        PETinder.delete_sync(point="Pessoas/{0}/caesBR".format("a"))        
+        PETinder.delete_sync(point="Pessoas/{0}/Caes_BR".format("a"))
         
         
 class CaesDoar(Caes):
@@ -80,7 +83,12 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["email"]=PETinder.get_sync(point="/Pessoas/{0}/dicionario/email".format(request.form['email']))
         dogDoar.append(self.nome)
         return self.dicionariocaodoa
-#    def Listar_CaesDoar(self):
+        PETinder.put_sync(point="/Pessoas/{0}/caesDoar".format("a"),data=self.nome)
+        PETinder.put_sync(point="/Pessoas/{0}/Caes_Doar".format("a"),data=self.dicionariocaodoa)
+    def Del_CaesBR(self):
+        
+        PETinder.delete_sync(point="Pessoas/{0}/caesDoar".format("a"))        
+        PETinder.delete_sync(point="Pessoas/{0}/Caes_Doar".format("a"))
 
 app = Flask(__name__, static_url_path='')
 
