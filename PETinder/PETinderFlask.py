@@ -132,7 +132,6 @@ def conta():
     
 @app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
-    print("1")
     if request.method == 'POST':
         nome = request.form['nome']
         raca = request.form['raca']
@@ -141,12 +140,11 @@ def cadastro():
         cor = request.form['cor']
         saude = request.form['saude']
         cidade = request.form['cidade']
-        print("2")
         NOME.append(nome)
         NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesBR()        
     PETinder.put_sync(point="/ListadogBR",data=dogBR)
-    return render_template('perfil.html', erro = '')
+    return render_template('cadastro.html', erro = '')
     
     
     
@@ -190,13 +188,13 @@ def home():
 def perfil():
 
     el = request.args['email']      
-    if request.method == 'GET':
+    if request.method == 'POST':
         a= eval(PETinder.get_sync(point="/Pessoas/{0}/caesBR".format(el)))
         caes = a
     #return x
     #Listar_CaesBRA
     #página que mostrará os cães cadastrados pelo usuário
-    return redirect(url_for('cadastro', x=caes))
+    return redirect(url_for('perfil', x=caes))
     
 @app.route('/doar', methods=['POST', 'GET'])
 def doar():
