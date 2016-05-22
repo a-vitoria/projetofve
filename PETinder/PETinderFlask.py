@@ -44,24 +44,21 @@ class Caes():
         
         
 class CaesBR(Caes):
-    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade):
-        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
+    def __init__(self,nome,raca,sexo,cidade,idade,cor,saude):
+        Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude)
     
-    def Salvar_CaesBR(self,objeto):
+    def Salvar_CaesBR(self):
+
         self.dicionariocaosex["nome"]=self.nome
-        self.dicionariocaosex["sexo"]=self.sexo
         self.dicionariocaosex["raca"]=self.raca
-        self.dicionariocaosex["cor"]=self.cor
-        self.dicionariocaosex["idade"]=self.idade
-        self.dicionariocaosex["saude"]=self.saude
+        self.dicionariocaosex["sexo"]=self.sexo
         self.dicionariocaosex["cidade"]=self.cidade
-        self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/dicionario/email".format(request.form['email'])))
+        self.dicionariocaosex["idade"]=self.idade
+        self.dicionariocaosex["cor"]=self.cor        
+        self.dicionariocaosex["saude"]=self.saude
+        self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/a/email"))
         dogBR.append(self.nome)
-        return self.dicionariocaosex
-        PETinder.put_sync(point="/Pessoas/{0}/caesBR".format("a"),data=self.nome)
-
-
-        PETinder.put_sync(point="/Pessoas/{0}/Caes_BR".format("a"),data=self.dicionariocaosex)
+        PETinder.put_sync(point="/Pessoas/a/Caes_BR/{0}".format(self.nome),data=self.dicionariocaosex)
         print("oba")
     def Del_CaesBR(self):
         
@@ -71,22 +68,21 @@ class CaesBR(Caes):
         
         
 class CaesDoar(Caes):
-    def __init__(self,nome,sexo,raca,cor,idade,saude,cidade):
-        Caes.__init__(self,nome,sexo,raca,cor,idade,saude,cidade)
+    def __init__(self,nome,raca,sexo,cidade,idade,cor,saude):
+        Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude)
 
-    def Salvar_CaesDoar(self,objeto):
-        self.dicionariocaodoa["nome"]=self.nome
-        self.dicionariocaodoa["sexo"]=self.sexo
-        self.dicionariocaodoa["raca"]=self.raca
-        self.dicionariocaodoa["cor"]=self.cor
-        self.dicionariocaodoa["idade"]=self.idade
-        self.dicionariocaodoa["saude"]=self.saude
-        self.dicionariocaodoa["cidade"]=self.cidade
-        self.dicionariocaodoa["email"]=PETinder.get_sync(point="/Pessoas/{0}/dicionario/email".format(request.form['email']))
+    def Salvar_CaesDoar(self):
+        
+        self.dicionariocaosex["nome"]=self.nome
+        self.dicionariocaosex["raca"]=self.raca
+        self.dicionariocaosex["sexo"]=self.sexo
+        self.dicionariocaosex["cidade"]=self.cidade
+        self.dicionariocaosex["idade"]=self.idade
+        self.dicionariocaosex["cor"]=self.cor        
+        self.dicionariocaosex["saude"]=self.saude
+        self.dicionariocaodoa["email"]=PETinder.get_sync(point="/Pessoas/a/email")
         dogDoar.append(self.nome)
-        return self.dicionariocaodoa
-        PETinder.put_sync(point="/Pessoas/{0}/caesDoar".format("a"),data=self.nome)
-        PETinder.put_sync(point="/Pessoas/{0}/Caes_Doar".format("a"),data=self.dicionariocaodoa)
+        PETinder.put_sync(point="/Pessoas/a/CaesDoar/{0}".format(self.nome),data=self.dicionariocaodoa)
     def Del_CaesBR(self):
         
         PETinder.delete_sync(point="Pessoas/{0}/caesDoar".format("a"))        
@@ -204,10 +200,9 @@ def home():
         
 @app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
-    print('3')
-    el = request.args['email']      
+          
     if request.method == 'POST':
-        a= eval(PETinder.get_sync(point="/Pessoas/{0}/caesBR".format(el)))
+        a= eval(PETinder.get_sync(point="/Pessoas/a/Caes_BR/{0}/nome".format("nome")))
         caes = a
 
     #Listar_CaesBR
