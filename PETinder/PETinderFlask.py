@@ -222,7 +222,23 @@ def doar():
 
     #Listar_CaesDoar
     #página que mostrará os animais cadastrados pelo usuário para doação
-    return render_template('doar.html', y=caesdoar)
+    return render_template('caddoar.html', y=caesdoar)
+    
+@app.route('/opt')
+def opt():
+    return render_template('opt.html')
+    
+@app.route('/opt/user')
+def user():
+    return render_template('user.html')
+    
+@app.route('/adotar')
+def adotar():
+    return render_template('adotar.html')
+    
+@app.route('/adotar/adote')
+def adote():
+    return render_template('adote.html')
     
 
 if __name__ == '__main__':
