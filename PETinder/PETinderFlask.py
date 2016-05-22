@@ -160,6 +160,7 @@ def cadastro():
         NOME.append(nome)
         NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesBR()
+        return render_template('perfil.html')
     PETinder.put_sync(point="/ListadogBR",data=dogBR)
     return render_template('cadastro.html', erro = '')
     
