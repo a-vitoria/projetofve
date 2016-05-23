@@ -190,10 +190,10 @@ def home():
             return render_template('perfil.html', email = "a")
         
         elif button == "doar":
-            return render_template('doar.html')
+            return render_template('doar.html', email = "a" )
         
         elif button == "adotar":
-            return redirect(url_for('adotar'))
+            return render_template('adotar.html', email = "a" )
             
     return render_template('home.html')
         
@@ -211,27 +211,34 @@ def perfil():
 @app.route('/doar', methods=['POST', 'GET'])
 def doar():
     print('doar')
-    el = request.args['email']
-    b= eval(PETinder.get_sync(point="/Pessoas/{0}/caesDoar".format(el)))
-    caesdoar = b
+    if request.method == 'POST':
+        b= eval(PETinder.get_sync(point="/Pessoas/a/Caes_Doar/{0}/nome".format("nome")))
+        caesdoar = b
 
     #Listar_CaesDoar
     #página que mostrará os animais cadastrados pelo usuário para doação
-    return render_template('caddoar.html', y=caesdoar)
+    return redirect(url_for('doar', y=caesdoar))
     
-@app.route('/opt')
+@app.route('/opt', methods=['POST', 'GET'])
 def opt():
     return render_template('opt.html')
     
-@app.route('/opt/user')
+@app.route('/opt/user', methods=['POST', 'GET'])
 def user():
     return render_template('user.html')
     
-@app.route('/adotar')
+@app.route('/adotar', methods=['POST', 'GET'])
 def adotar():
+    button = request.args['button']
+    if request.methods == 'POST':
+        print ("foi")
+        if button == "adotar":
+            return render_template('adote.html')
+        
+        
     return render_template('adotar.html')
     
-@app.route('/adotar/adote')
+@app.route('/adotar/adote', methods=['POST', 'GET'])
 def adote():
     return render_template('adote.html')
     
