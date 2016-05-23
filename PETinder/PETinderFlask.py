@@ -5,12 +5,13 @@ import firecall
 PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
 dogBR=[]
 dogDoar=[]
-EMAIL=[]
+USER=[]
 NOME=[]
 
 class Pessoa():
     
-    def __init__(self, nomepessoa, email, senha):
+    def __init__(self, pessoa, nomepessoa, email, senha):
+        self.pessoa=pessoa
         self.nomepessoa = nomepessoa
         self.email = email
         self.senha = senha
@@ -19,13 +20,14 @@ class Pessoa():
         self.caodoa=[]
         
     def Salvar_Pessoa(self):
+        self.dicionario["pessoa"]=self.pessoa
         self.dicionario["email"]=self.email
         self.dicionario["nomepessoa"]=self.nomepessoa
         self.dicionario["senha"]=self.senha
         self.dicionario["caesBR"]=self.caosex
         self.dicionario["caesDoar"]=self.caodoa
            
-        PETinder.put_sync(point="/Pessoas/{0}".format(self.email),data=self.dicionario)
+        PETinder.put_sync(point="/Pessoas/{0}".format(self.nomepessoa),data=self.dicionario)
         
         
 
@@ -56,14 +58,14 @@ class CaesBR(Caes):
         self.dicionariocaosex["idade"]=self.idade
         self.dicionariocaosex["cor"]=self.cor        
         self.dicionariocaosex["saude"]=self.saude
-        self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/a/email"))
+        self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(user)))
         dogBR.append(self.nome)
-        PETinder.put_sync(point="/Pessoas/a/Caes_BR/{0}".format(self.nome),data=self.dicionariocaosex)
+        PETinder.put_sync(point="/Pessoas/{0}/Caes_BR/{1}".format(user,self.nome),data=self.dicionariocaosex)
 
     def Del_CaesBR(self):
         
-        PETinder.delete_sync(point="Pessoas/{0}/caesBR".format("a"))        
-        PETinder.delete_sync(point="Pessoas/{0}/Caes_BR".format("a"))
+        PETinder.delete_sync(point="Pessoas/{0}/caesBR".format(user))        
+        PETinder.delete_sync(point="Pessoas/{0}/Caes_BR".format(user))
 
         
         
@@ -80,14 +82,14 @@ class CaesDoar(Caes):
         self.dicionariocaosex["idade"]=self.idade
         self.dicionariocaosex["cor"]=self.cor        
         self.dicionariocaosex["saude"]=self.saude
-        self.dicionariocaodoa["email"]=PETinder.get_sync(point="/Pessoas/a/email")
+        self.dicionariocaodoa["email"]=PETinder.get_sync(point="/Pessoas/{0}/email".format(user))
         dogDoar.append(self.nome)
-        PETinder.put_sync(point="/Pessoas/a/CaesDoar/{0}".format(self.nome),data=self.dicionariocaodoa)
+        PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user,self.nome),data=self.dicionariocaodoa)
         print("oba")
     def Del_CaesBR(self):
         
-        PETinder.delete_sync(point="Pessoas/a/caesDoar")
-        PETinder.delete_sync(point="Pessoas/a/Caes_Doar")
+        PETinder.delete_sync(point="Pessoas/{0}/caesDoar".format(user))
+        PETinder.delete_sync(point="Pessoas/{0}/Caes_Doar".format(user))
 
 app = Flask(__name__, static_url_path='')
 
@@ -95,22 +97,22 @@ app = Flask(__name__, static_url_path='')
 def firstpage():
     
     if request.method == 'POST':
-        email = request.form['email']
+        nomepessoa = request.form['nomepessoa']
         senha = request.form['senha']
-        L = eval(PETinder.get_sync(point="/ListaEMAIL"))
-        if email in L:
+        L = eval(PETinder.get_sync(point="/ListaUSER"))
+        if nomepessoa in L:
             listasenha=[]
-            s= eval(PETinder.get_sync(point="/Pessoas/{0}/senha".format(email)))
+            s= eval(PETinder.get_sync(point="/Pessoas/{0}/senha".format(nomepessoa)))
             listasenha.append(s)
             if senha in listasenha:
-                return render_template('home.html', email=email)
+                return render_template('home.html')
             else: 
                 e = 'Senha incorreta'
                 
-                return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e) 
+                return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e) 
         else:
             e = 'Usuário inválido'
-            return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
+            return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
 #    el=request.args['email']
     return render_template('main.html', pessoa = Pessoa('','',''))        
 
@@ -118,23 +120,24 @@ def firstpage():
 @app.route('/login', methods=['POST','GET'])
 def conta():
     if request.method == 'POST':
+        nome = request.form['pessoa']
         nomepessoa = request.form['nomepessoa']
         email = request.form['email']
         senha = request.form['senha']
-        ema= eval(PETinder.get_sync(point="/ListaEMAIL"))
-        if email in ema:
-            e = 'Email já cadastrado'
+        use= eval(PETinder.get_sync(point="/ListaUSER"))
+        if nomepessoa in use:
+            e = 'User já cadastrado'
 
-            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
+            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(user)), erro = e)
         elif email == "":
             e = 'O campo Email está vazio'
-            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(email)), erro = e)
+            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(user)), erro = e)
         else:
-            EMAIL.append(email)
-            EMAIL[-1] = Pessoa(nomepessoa, email, senha)
-            EMAIL[-1].Salvar_Pessoa() 
-            PETinder.put_sync(point="/ListaEMAIL/{0}".format(email),data=email)                
-            return render_template('home.html', dic = EMAIL[-1].dicionario)
+            USER.append(nomepessoa)
+            USER[-1] = Pessoa(nome , nomepessoa, email, senha)
+            USER[-1].Salvar_Pessoa() 
+            PETinder.put_sync(point="/ListaUSER/{0}".format(nomepessoa),data=nomepessoa)                
+            return render_template('home.html', dic = USER[-1].dicionario)
 #    el=request.args['email']
     return render_template('login.html', erro = '')
     
@@ -188,21 +191,21 @@ def home():
     if request.method == 'POST':
         if button == "parceiro":
             
-            return render_template('perfil.html', email = user)
+            return render_template('perfil.html', user = user)
         
         elif button == "doar":
-            return render_template('doar.html', email = "a" )
+            return render_template('doar.html', user = user )
         
         elif button == "adotar":
-            return render_template('adotar.html', email = "a" )
+            return render_template('adotar.html', user = user )
             
     return render_template('home.html')
         
 @app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
-          
+    user=request.args['user'] 
     if request.method == 'POST':
-        a= eval(PETinder.get_sync(point="/Pessoas/a/Caes_BR/{0}/nome".format("nome")))
+        a= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/{1}/nome".format(user,nome)))
         caes = a
 
     #Listar_CaesBR
@@ -211,9 +214,10 @@ def perfil():
     
 @app.route('/doar', methods=['POST', 'GET'])
 def doar():
+    user=request.args['user']
     print('doar')
     if request.method == 'POST':
-        b= eval(PETinder.get_sync(point="/Pessoas/a/Caes_Doar/{0}/nome".format("nome")))
+        b= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_Doar/{1}/nome".format(user,nome)))
         caesdoar = b
 
     #Listar_CaesDoar
@@ -222,15 +226,18 @@ def doar():
     
 @app.route('/opt', methods=['POST', 'GET'])
 def opt():
+    user=request.args['user']
     return render_template('opt.html')
     
 @app.route('/opt/user', methods=['POST', 'GET'])
 def user():
+    user=request.args['user']
     return render_template('user.html')
     
 @app.route('/adotar', methods=['POST', 'GET'])
 def adotar():
-    button = request.args['button']
+    user=request.args['user']
+    button = request.form['button']
     if request.methods == 'POST':
         print ("foi")
         if button == "adotar":
@@ -241,6 +248,7 @@ def adotar():
     
 @app.route('/adotar/adote', methods=['POST', 'GET'])
 def adote():
+    user=request.args['user']
     return render_template('adote.html')
     
 
