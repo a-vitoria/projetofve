@@ -59,7 +59,7 @@ class CaesBR(Caes):
         self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/a/email"))
         dogBR.append(self.nome)
         PETinder.put_sync(point="/Pessoas/a/Caes_BR/{0}".format(self.nome),data=self.dicionariocaosex)
-        print("oba")
+
     def Del_CaesBR(self):
         
         PETinder.delete_sync(point="Pessoas/{0}/caesBR".format("a"))        
@@ -83,10 +83,11 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["email"]=PETinder.get_sync(point="/Pessoas/a/email")
         dogDoar.append(self.nome)
         PETinder.put_sync(point="/Pessoas/a/CaesDoar/{0}".format(self.nome),data=self.dicionariocaodoa)
+        print("oba")
     def Del_CaesBR(self):
         
-        PETinder.delete_sync(point="Pessoas/{0}/caesDoar".format("a"))        
-        PETinder.delete_sync(point="Pessoas/{0}/Caes_Doar".format("a"))
+        PETinder.delete_sync(point="Pessoas/a/caesDoar")
+        PETinder.delete_sync(point="Pessoas/a/Caes_Doar")
 
 app = Flask(__name__, static_url_path='')
 
@@ -140,12 +141,9 @@ def conta():
 @app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
 
-    
-    print('1')
-
     if request.method=='POST':
 
-        print('2')
+
         nome = request.form['nome']
         raca = request.form['raca']
         sexo = request.form['sexo']
@@ -164,7 +162,8 @@ def cadastro():
     
 @app.route('/caddoar', methods=['POST','GET'])
 def caddoar():
-    if request.method == 'POST':       
+    if request.method == 'POST':     
+        print('2')
         nome = request.form['nome']
         raca = request.form['raca']
         sexo = request.form['sexo']
@@ -172,11 +171,11 @@ def caddoar():
         cor = request.form['cor']
         saude = request.form['saude']
         cidade = request.form['cidade']
-        request.form['nome'] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
-        request.form['nome'].Salvar_CaesDoar()
+        NOME.append(nome)
+        NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
+        NOME[-1].Salvar_CaesDoar()
+        return render_template('doar.html')
         
-    PETinder.put_sync(point="/Pessoas",data=Pessoa.dicionario)
-    PETinder.put_sync(point="/Caes_Doar",data=request.form['nome'].dicionariocaodoa)
     PETinder.put_sync(point="/ListadogDoar",data=dogDoar)    
     return render_template('caddoar.html', erro = '')
         
@@ -211,6 +210,7 @@ def perfil():
     
 @app.route('/doar', methods=['POST', 'GET'])
 def doar():
+    print('doar')
     el = request.args['email']
     b= eval(PETinder.get_sync(point="/Pessoas/{0}/caesDoar".format(el)))
     caesdoar = b
