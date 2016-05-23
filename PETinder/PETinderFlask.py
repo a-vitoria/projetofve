@@ -105,7 +105,7 @@ def firstpage():
             s= eval(PETinder.get_sync(point="/Pessoas/{0}/senha".format(nomepessoa)))
             listasenha.append(s)
             if senha in listasenha:
-                return render_template('home.html')
+                return render_template('home.html', nomepessoa=nomepessoa)
             else: 
                 e = 'Senha incorreta'
                 
@@ -114,7 +114,7 @@ def firstpage():
             e = 'Usuário inválido'
             return render_template('main.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
 #    el=request.args['email']
-    return render_template('main.html', pessoa = Pessoa('','',''))        
+    return render_template('main.html', pessoa = Pessoa('','','',''))        
 
     
 @app.route('/login', methods=['POST','GET'])
@@ -128,16 +128,16 @@ def conta():
         if nomepessoa in use:
             e = 'User já cadastrado'
 
-            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(user)), erro = e)
+            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         elif email == "":
             e = 'O campo Email está vazio'
-            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(user)), erro = e)
+            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         else:
             USER.append(nomepessoa)
             USER[-1] = Pessoa(nome , nomepessoa, email, senha)
             USER[-1].Salvar_Pessoa() 
             PETinder.put_sync(point="/ListaUSER/{0}".format(nomepessoa),data=nomepessoa)                
-            return render_template('home.html', dic = USER[-1].dicionario)
+            return render_template('home.html', dic = USER[-1].nomepessoa)
 #    el=request.args['email']
     return render_template('login.html', erro = '')
     
@@ -191,13 +191,13 @@ def home():
     if request.method == 'POST':
         if button == "parceiro":
             
-            return render_template('perfil.html', user = user)
+            return render_template('perfil.html', nomepessoa = user)
         
         elif button == "doar":
-            return render_template('doar.html', user = user )
+            return render_template('doar.html', nomepessoa = user )
         
         elif button == "adotar":
-            return render_template('adotar.html', user = user )
+            return render_template('adotar.html', nomepessoa = user )
             
     return render_template('home.html')
         
