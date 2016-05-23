@@ -182,12 +182,13 @@ def caddoar():
 @app.route('/home', methods=['POST', 'GET'])
 def home():
   
-    button=request.args['button']
+    button=request.form['button']
+    user=request.args['user']
     
-    if request.method == 'GET':
+    if request.method == 'POST':
         if button == "parceiro":
             
-            return render_template('perfil.html', email = "a")
+            return render_template('perfil.html', email = user)
         
         elif button == "doar":
             return render_template('doar.html', email = "a" )

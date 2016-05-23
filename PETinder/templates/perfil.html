@@ -23,7 +23,7 @@
 <center>
 <img src="seuspets.png"/>
 <br><br>
-<a href="/cadastro"><button class="button orange"><i class="large"><i class="pill"><i class="fa fa-paw"></i></i></i> Cadastrar</button></center></br></br></a>
+<a href="/cadastro?user={{ nomepessoa }}"><button class="button orange"><i class="large"><i class="pill"><i class="fa fa-paw"></i></i></i> Cadastrar</button></center></br></br></a>
 <table class="sortable striped">
 						<thead><tr>
 							<th>Cão</th>
@@ -35,7 +35,7 @@
 							{% for e in x: %}
 							<tr>
 								<td>{{ x[e].nome }}</td>
-								<td><a href="/opt"><i class="fa fa-heart"></i></a></td>
+								<td><a href="/opt?user={{ nomepessoa }}"><i class="fa fa-heart"></i></a></td>
             						<td><a href="./del?numero={{ e }}"><i class="fa fa-trash"></i></a></td>
                                         </tr>
 							{% endfor %}
