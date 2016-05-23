@@ -34,9 +34,10 @@
 <br></br>
 <a href="/opt?ant"><img src="ant.png" /></a>
 </div>
+<form class="vertical" method="POST" action="/opt">
 <div class="col_8">
 <img class="caption" title="	{% for e in dic: %}
-{{ dic[e].cao }}, {{ dic[e].idade }} anos, {{ dic[e].cidade }}
+{{ dic[e].nome }}, {{ dic[e].idade }} anos, {{ dic[e].cidade }}
 {% endfor %}" src="teste1.jpg" />
 </div>
 <div class="col_2">
@@ -47,7 +48,7 @@
 <br></br>
 <a href="/opt?prox"><img src="prox.png" /></a>
 </div>
-<center><a href="user.html"><button class="button orange"><i class="large"><i class="pill"><i class="fa fa-heart"></i></i></i> Quero esse!</button></center></a>
+<center><button nome="button" value="escolher" class="button orange"><i class="large"><i class="pill"><i class="fa fa-heart"></i></i></i> Quero esse!</button></center></form>
 </div></div></div>
 <div class="col_2"></div></div>
 
