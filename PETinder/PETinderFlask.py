@@ -33,14 +33,14 @@ class Pessoa():
 
 class Caes():
     
-    def __init__(self, nome, sexo, raca, cor, idade, saude, cidade):
+    def __init__(self, nome, raca, sexo, idade, cor, saude, cidade):
         self.nome = nome
-        self.sexo = sexo
         self.raca = raca
-        self.cor = cor
+        self.sexo = sexo
+        self.cidade = cidade    
         self.idade = idade
+        self.cor = cor
         self.saude = saude
-        self.cidade = cidade
         self.dicionariocaosex={}
         self.dicionariocaodoa={}
         
@@ -148,14 +148,14 @@ def cadastro():
     print (user)
     if request.method=='POST':
 
-
         nome = request.form['nome']
         raca = request.form['raca']
         sexo = request.form['sexo']
+        cidade = request.form['cidade']
         idade = request.form['idade']
         cor = request.form['cor']
         saude = request.form['saude']
-        cidade = request.form['cidade']
+        
         NOME.append(nome)
         NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesBR(user)
@@ -174,10 +174,10 @@ def caddoar():
         nome = request.form['nome']
         raca = request.form['raca']
         sexo = request.form['sexo']
+        cidade = request.form['cidade']
         idade = request.form['idade']
         cor = request.form['cor']
         saude = request.form['saude']
-        cidade = request.form['cidade']
         NOME.append(nome)
         NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesDoar(user)
