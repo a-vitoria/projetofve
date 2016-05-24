@@ -138,7 +138,7 @@ def conta():
             USER[-1] = Pessoa(nome , nomepessoa, email, senha)
             USER[-1].Salvar_Pessoa() 
             PETinder.put_sync(point="/ListaUSER/{0}".format(nomepessoa),data=nomepessoa)                
-            return render_template('home.html', dic = USER[-1].nomepessoa)
+            return render_template('home.html', dic = USER[-1].nomepessoa, nomepessoa = nomepessoa)
 #    el=request.args['email']
     return render_template('login.html', erro = '')
     
