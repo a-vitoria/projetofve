@@ -139,7 +139,7 @@ def conta():
             USER[-1].Salvar_Pessoa() 
             PETinder.put_sync(point="/ListaUSER/{0}".format(nomepessoa),data=nomepessoa)                
             return render_template('home.html', dic = USER[-1].nomepessoa, nomepessoa = nomepessoa)
-#    el=request.args['email']
+
     return render_template('login.html', erro = '')
     
 @app.route('/cadastro', methods=['POST','GET'])
@@ -209,7 +209,7 @@ def home():
 def perfil():
     user=request.args['user'] 
     if request.method == 'POST':
-        a= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/nome".format(user)))
+        a = eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/nome".format(user)))
         caes = a
 
     #Listar_CaesBR
@@ -242,7 +242,7 @@ def usuario():
 def adotar():
     user=request.args['user']
     button = request.form['button']
-    if request.methods == 'POST':
+    if request.method == 'POST':
         print ("foi")
         if button == "adotar":
             return render_template('adote.html')
