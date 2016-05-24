@@ -220,7 +220,7 @@ def doar():
     user=request.args['user']
     print('doar')
     if request.method == 'POST':
-        b= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_Doar/{1}/nome".format(user,nome)))
+        b= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_Doar/nome".format(user)))
         caesdoar = b
 
     #Listar_CaesDoar
