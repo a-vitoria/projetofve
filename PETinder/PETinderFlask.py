@@ -84,7 +84,7 @@ class CaesDoar(Caes):
         self.dicionariocaosex["saude"]=self.saude
         self.dicionariocaodoa["email"]=PETinder.get_sync(point="/Pessoas/{0}/email".format(user))
         dogDoar.append(self.nome)
-        PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user,self.nome),data=self.dicionariocaodoa)
+        PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/nome".format(user),data=self.dicionariocaodoa)
         print("oba")
     def Del_CaesBR(self,user):
         
@@ -180,10 +180,10 @@ def caddoar():
         NOME.append(nome)
         NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesDoar(user)
-        return render_template('doar.html')
+        return render_template('doar.html', nomepessoa = user)
         
     PETinder.put_sync(point="/ListadogDoar",data=dogDoar)    
-    return render_template('caddoar.html', erro = '')
+    return render_template('caddoar.html', nomepessoa = user, erro = '')
         
 @app.route('/home', methods=['POST', 'GET'])
 def home():
@@ -208,7 +208,7 @@ def home():
 def perfil():
     user=request.args['user'] 
     if request.method == 'POST':
-        a= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/{1}".format(user)))
+        a= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/nome".format(user)))
         caes = a
 
     #Listar_CaesBR
