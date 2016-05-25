@@ -241,6 +241,12 @@ def doar():
 @app.route('/opt', methods=['POST', 'GET'])
 def opt():
     user=request.args['user']
+    Lista = []
+    for h in range (eval(PETinder.get("/ListaUSER"))):
+        for i in range (eval(PETinder.get("Pessoas/{0}/CaesDoar".format(h)))):
+            for j in range (eval(PETinder.get("Pessoas/{0}/CaesDoar/{1}".format(h,i)))):
+                Lista.append(eval(PETinder.get("/Pessoas/{0}/CaesDoar/{1}/{2}".format(h,i,j))))
+                
     return render_template('opt.html')
     
 @app.route('/opt/usuario', methods=['POST', 'GET'])
