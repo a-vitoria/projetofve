@@ -58,7 +58,7 @@ class CaesBR(Caes):
         self.dicionariocaosex["idade"]=self.idade
         self.dicionariocaosex["cor"]=self.cor        
         self.dicionariocaosex["saude"]=self.saude
-        self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(user)))
+        self.dicionariocaosex["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         dogBR.append(self.nome)
         PETinder.put_sync(point="/Pessoas/{0}/Caes_BR/{1}".format(user,self.nome),data=self.dicionariocaosex)
 
@@ -82,7 +82,7 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["idade"]=self.idade
         self.dicionariocaodoa["cor"]=self.cor        
         self.dicionariocaodoa["saude"]=self.saude
-        self.dicionariocaodoa["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(user)))
+        self.dicionariocaodoa["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         dogDoar.append(self.nome)
         PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user,self.nome),data=self.dicionariocaodoa)
         print("oba")
@@ -159,8 +159,9 @@ def cadastro():
         NOME.append(nome)
         NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesBR(user)
+        PETinder.put_sync(point="/ListadogBR",data=NOME[-1])
         return redirect(url_for('perfil', user=user))
-    PETinder.put_sync(point="/ListadogBR",data=dogBR)
+
     return render_template('cadastro.html',nomepessoa = user, erro = '')
     
     
@@ -181,9 +182,10 @@ def caddoar():
         NOME.append(nome)
         NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesDoar(user)
+        PETinder.put_sync(point="/ListadogDoar",data=NOME[-1]) 
         return redirect(url_for('doar', user=user))
         
-    PETinder.put_sync(point="/ListadogDoar",data=dogDoar)    
+   
     return render_template('caddoar.html', nomepessoa = user, erro = '')
         
 @app.route('/home', methods=['POST', 'GET'])
@@ -242,9 +244,9 @@ def doar():
 def opt():
     user=request.args['user']
     Lista = []
-    for h in range (eval(PETinder.get("/ListaUSER"))):
-        for i in range (eval(PETinder.get("Pessoas/{0}/CaesDoar".format(h)))):
-            for j in range (eval(PETinder.get("Pessoas/{0}/CaesDoar/{1}".format(h,i)))):
+    for h in (eval(PETinder.get("/ListaUSER"))):
+        for i in (eval(PETinder.get("Pessoas/{0}/CaesDoar".format(h)))):
+            for j in (eval(PETinder.get("Pessoas/{0}/CaesDoar/{1}".format(h,i)))):
                 Lista.append(eval(PETinder.get("/Pessoas/{0}/CaesDoar/{1}/{2}".format(h,i,j))))
                 
     return render_template('opt.html')
