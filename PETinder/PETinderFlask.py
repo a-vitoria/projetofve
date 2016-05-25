@@ -159,7 +159,7 @@ def cadastro():
         NOME.append(nome)
         NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesBR(user)
-        return render_template('perfil.html',nomepessoa = user)
+        return redirect(url_for('perfil', user=user))
     PETinder.put_sync(point="/ListadogBR",data=dogBR)
     return render_template('cadastro.html',nomepessoa = user, erro = '')
     
@@ -224,7 +224,7 @@ def perfil():
         caes=eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/{1}/nome".format(user, j)))
         listacaes.append(caes)
     #página que mostrará os animais cadastrados pelo usuário
-    return render_template('perfil.html', caesb=caesb)
+    return render_template('perfil.html', nomepessoa=user, caesb=caesb)
     
 @app.route('/doar', methods=['POST', 'GET'])
 def doar():
@@ -236,7 +236,7 @@ def doar():
         listacaesd.append(caesd)
     #Listar_CaesDoar
     #página que mostrará os animais cadastrados pelo usuário para doação
-    return render_template('doar.html', caesdoar=caesdoar)
+    return render_template('doar.html', nomepessoa=user, caesdoar=caesdoar)
     
 @app.route('/opt', methods=['POST', 'GET'])
 def opt():
