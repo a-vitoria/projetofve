@@ -181,7 +181,7 @@ def caddoar():
         NOME.append(nome)
         NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesDoar(user)
-        return render_template('doar.html', nomepessoa = user)
+        return redirect(url_for('doar', user=user))
         
     PETinder.put_sync(point="/ListadogDoar",data=dogDoar)    
     return render_template('caddoar.html', nomepessoa = user, erro = '')
@@ -193,12 +193,22 @@ def home():
     user=request.args['user']
     
     if request.method == 'POST':
+        
         if button == "parceiro":
-            
-            return render_template('perfil.html', nomepessoa = user)
+            try:
+                listausers= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR".format(user)))
+                for y in listausers:
+                    return redirect(url_for('perfil', user=user))
+            except:
+                return render_template('perfil.html', nomepessoa=user)
         
         elif button == "doar":
-            return render_template('doar.html', nomepessoa = user )
+            try:
+                listauser=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar".format(user)))
+                for x in listauser:                
+                    return redirect(url_for('doar', user = user ))
+            except:
+                return render_template('doar.html', nomepessoa = user)
         
         elif button == "adotar":
             return render_template('adotar.html', nomepessoa = user )
@@ -207,26 +217,26 @@ def home():
         
 @app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
-    user=request.args['user'] 
-    if request.method == 'POST':
-        a = eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/nome".format(user)))
-        caes = a
-
-    #Listar_CaesBR
-    #página que mostrará os cães cadastrados pelo usuário
-    return redirect(url_for('perfil', x=caes))
+    user=request.args['user']
+    caesb= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR".format(user)))
+    listacaes=[]
+    for j in caesb:
+        caes=eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/{1}/nome".format(user, j)))
+        listacaes.append(caes)
+    #página que mostrará os animais cadastrados pelo usuário
+    return render_template('perfil.html', caesb=caesb)
     
 @app.route('/doar', methods=['POST', 'GET'])
 def doar():
     user=request.args['user']
-    print('doar')
-    if request.method == 'POST':
-        b= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_Doar/nome".format(user)))
-        caesdoar = b
-
+    caesdoar= eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar".format(user)))
+    listacaesd=[]
+    for i in caesdoar:
+        caesd=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar/{1}/nome".format(user, i)))
+        listacaesd.append(caesd)
     #Listar_CaesDoar
     #página que mostrará os animais cadastrados pelo usuário para doação
-    return redirect(url_for('doar', y=caesdoar))
+    return render_template('doar.html', caesdoar=caesdoar)
     
 @app.route('/opt', methods=['POST', 'GET'])
 def opt():
@@ -253,7 +263,12 @@ def adotar():
 @app.route('/adotar/adote', methods=['POST', 'GET'])
 def adote():
     user=request.args['user']
-    return render_template('adote.html')
+    adot=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar".format(user)))
+    listaadote=[]    
+    for f in adot:
+        caesad=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user, f)))
+        listaadote.append(caesad)
+    return render_template('adote.html', caesad=caesad)
     
 
 if __name__ == '__main__':

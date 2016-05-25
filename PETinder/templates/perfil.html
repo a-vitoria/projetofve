@@ -25,21 +25,23 @@
 <br><br>
 <a href="/cadastro?user={{ nomepessoa }}"><button class="button orange"><i class="large"><i class="pill"><i class="fa fa-paw"></i></i></i> Cadastrar</button></center></br></br></a>
 <table class="sortable striped">
-<thead><tr>
-<th>Cão</th>
-<th>Escolher esse</th>
-<th>Deletar</th>
-</tr></thead>
-<tbody>
-{% for e in dic: %}
-<tr>
-<td>{{ dic[e].nome }}</td>
-<td><a href="/opt?user={{ nomepessoa }}"><i class="fa fa-heart"></i></a></td>
-<td><a href="./del?nome={{ e }}"><i class="fa fa-trash"></i></a></td>
-</tr>
-{% endfor %}
-</tbody>
-</table>
+						<thead><tr>
+							<th>Cão</th>
+                                        <th>Escolher esse</th>
+							<th>Deletar</th>
+						</tr></thead>
+						<tbody>
+						   
+							{% for e in caesb: %}
+							<tr>
+								<td>{{ caesb[e].nome }}</td>
+                                              <td><a href="/opt?user={{ nomepessoa }}"><i class="fa fa-heart"></i></a></td>							
+								<td><a href="/del?nome={{ e }}"><i class="fa fa-trash"></i></a></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+
 </div></div></div>
 <div class="col_2"></div></div>
 <!-- End Grid -->

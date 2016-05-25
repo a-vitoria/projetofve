@@ -31,10 +31,10 @@
 						</tr></thead>
 						<tbody>
 						   
-							{% for e in y: %}
+							{% for e in caesdoar: %}
 							<tr>
-								<td>{{ y[e].nome }}</td>							
-								<td><a href="./del?numero={{ e }}"><i class="fa fa-trash"></i></a></td>
+								<td>{{ caesdoar[e].nome }}</td>							
+								<td><a href="/del?nome={{ e }}"><i class="fa fa-trash"></i></a></td>
 							</tr>
 							{% endfor %}
 						</tbody>
