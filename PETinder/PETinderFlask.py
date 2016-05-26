@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect
-
+from random import choice
 import firecall
 #
 PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
@@ -65,6 +65,7 @@ class CaesBR(Caes):
         ListadogBR.append(self.dicionariocaosex)
         PETinder.put_sync(point="/Pessoas/{0}/Caes_BR/{1}".format(user,self.nome),data=self.dicionariocaosex)
         PETinder.put_sync(point="/ListadogBR/{0}".format(self.nome),data=ListadogBR)
+        
     def Del_CaesBR(self,user):
         PETinder.delete_sync(point="Pessoas/{0}/caesBR".format(user))        
         PETinder.delete_sync(point="Pessoas/{0}/Caes_BR".format(user))
@@ -243,13 +244,15 @@ def doar():
 @app.route('/opt', methods=['POST', 'GET'])
 def opt():
     user=request.args['user']
-    Lista = []
-    for h in (eval(PETinder.get("/ListaUSER"))):
-        for i in (eval(PETinder.get("Pessoas/{0}/CaesDoar".format(h)))):
-            for j in (eval(PETinder.get("Pessoas/{0}/CaesDoar/{1}".format(h,i)))):
-                Lista.append(eval(PETinder.get("/Pessoas/{0}/CaesDoar/{1}/{2}".format(h,i,j))))
+    nome=request.args['nome']
+    
+    if request.method == 'POST':
+        
+        caesopt = eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(nome),data=ListadogBR))
+        
+        
                 
-    return render_template('opt.html')
+    return render_template('opt.html', nomepessoa = user, nome = nome)
     
 @app.route('/opt/usuario', methods=['POST', 'GET'])
 def usuario():
