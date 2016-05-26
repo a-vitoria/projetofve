@@ -101,7 +101,6 @@ def firstpage():
     
     if request.method == 'POST':
         nomepessoa = request.form['nomepessoa']
-        print(nomepessoa)
         senha = request.form['senha']
         L = eval(PETinder.get_sync(point="/ListaUSER"))
         if nomepessoa in L:
@@ -130,11 +129,19 @@ def conta():
         senha = request.form['senha']
         use= eval(PETinder.get_sync(point="/ListaUSER"))
         if nomepessoa in use:
-            e = 'User já cadastrado'
-
+            e = 'Usuário já cadastrado'
             return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         elif email == "":
             e = 'O campo Email está vazio'
+            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
+        elif senha == "":
+            e = 'O campo Senha está vazio'
+            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)        
+        elif nomepessoa == "":
+            e = 'O campo Usuário está vazio'
+            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)        
+        elif nome == "":
+            e = 'O campo Nome está vazio'
             return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         else:
             USER.append(nomepessoa)
@@ -148,7 +155,6 @@ def conta():
 @app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
     user=request.args['user']
-    print ("cookie")
     if request.method=='POST':
 
         nome = request.form['nome']
@@ -171,9 +177,7 @@ def cadastro():
 @app.route('/caddoar', methods=['POST','GET'])
 def caddoar():
     user=request.args['user']
-    print (user)
     if request.method == 'POST':     
-        print('2')
         nome = request.form['nome']
         raca = request.form['raca']
         sexo = request.form['sexo']
@@ -245,12 +249,13 @@ def doar():
 def opt():
     user=request.args['user']
     nome=request.args['nome']
-    
+    print("quase foi")
     if request.method == 'POST':
+        print("foi")
         
-        caesopt = eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(nome),data=ListadogBR))
+        h=choice(eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR)))
         
-        
+        return render_template('opt.html', caes = h, dic = (eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR))))
                 
     return render_template('opt.html', nomepessoa = user, nome = nome)
     
