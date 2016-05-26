@@ -7,6 +7,9 @@ dogBR=[]
 dogDoar=[]
 USER=[]
 NOME=[]
+ListadogBR=[]
+ListadogDoar=[]
+
 
 class Pessoa():
     
@@ -59,11 +62,10 @@ class CaesBR(Caes):
         self.dicionariocaosex["cor"]=self.cor        
         self.dicionariocaosex["saude"]=self.saude
         self.dicionariocaosex["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
-        dogBR.append(self.nome)
+        ListadogBR.append(self.dicionariocaosex)
         PETinder.put_sync(point="/Pessoas/{0}/Caes_BR/{1}".format(user,self.nome),data=self.dicionariocaosex)
-
+        PETinder.put_sync(point="/ListadogBR/{0}".format(self.nome),data=ListadogBR)
     def Del_CaesBR(self,user):
-        
         PETinder.delete_sync(point="Pessoas/{0}/caesBR".format(user))        
         PETinder.delete_sync(point="Pessoas/{0}/Caes_BR".format(user))
 
@@ -83,9 +85,9 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["cor"]=self.cor        
         self.dicionariocaodoa["saude"]=self.saude
         self.dicionariocaodoa["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
-        dogDoar.append(self.nome)
+        ListadogDoar.append(self.dicionariocaodoa)
         PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user,self.nome),data=self.dicionariocaodoa)
-        print("oba")
+        PETinder.put_sync(point="/ListadogDoar/{0}".format(self.nome),data=ListadogDoar)
     def Del_CaesBR(self,user):
         
         PETinder.delete_sync(point="Pessoas/{0}/caesDoar".format(user))
@@ -145,7 +147,7 @@ def conta():
 @app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
     user=request.args['user']
-    print (user)
+    print ("cookie")
     if request.method=='POST':
 
         nome = request.form['nome']
@@ -159,7 +161,6 @@ def cadastro():
         NOME.append(nome)
         NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesBR(user)
-        PETinder.put_sync(point="/ListadogBR",data=NOME[-1])
         return redirect(url_for('perfil', user=user))
 
     return render_template('cadastro.html',nomepessoa = user, erro = '')
@@ -182,7 +183,6 @@ def caddoar():
         NOME.append(nome)
         NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
         NOME[-1].Salvar_CaesDoar(user)
-        PETinder.put_sync(point="/ListadogDoar",data=NOME[-1]) 
         return redirect(url_for('doar', user=user))
         
    
