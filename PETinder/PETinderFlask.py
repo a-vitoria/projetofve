@@ -64,7 +64,7 @@ class CaesBR(Caes):
         self.dicionariocaosex["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogBR.append(self.dicionariocaosex)
         PETinder.put_sync(point="/Pessoas/{0}/Caes_BR/{1}".format(user,self.nome),data=self.dicionariocaosex)
-        PETinder.put_sync(point="/ListadogBR/{0}".format(self.nome),data=ListadogBR)
+        PETinder.put_sync(point="/ListadogBR/{0}".format(self.nome),data=ListadogBR[-1])
         
     def Del_CaesBR(self,user):
         PETinder.delete_sync(point="Pessoas/{0}/caesBR".format(user))        
@@ -88,7 +88,7 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogDoar.append(self.dicionariocaodoa)
         PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user,self.nome),data=self.dicionariocaodoa)
-        PETinder.put_sync(point="/ListadogDoar/{0}".format(self.nome),data=ListadogDoar)
+        PETinder.put_sync(point="/ListadogDoar/{0}".format(self.nome),data=ListadogDoar[-1])
     def Del_CaesBR(self,user):
         
         PETinder.delete_sync(point="Pessoas/{0}/caesDoar".format(user))
