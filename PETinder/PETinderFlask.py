@@ -198,6 +198,7 @@ def home():
   
     button=request.form['button']
     user=request.args['user']
+    print (ListadogBR)
     
     if request.method == 'POST':
         
@@ -250,32 +251,36 @@ def opt():
     user=request.args['user']
     nome=request.args['nome']
     print("quase foi")
+    print (ListadogBR)
+    h=choice(eval(PETinder.get_sync(point = "/ListadogBR", data=ListadogBR)))
     if request.method == 'POST':
         print("foi")
         
         h=choice(eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR)))
         
-        return render_template('opt.html', cao = h, dic = (eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR))))
+    return render_template('opt.html', cao = h, dic = (eval(PETinder.get_sync(point = "/ListadogBR", data=ListadogBR), nomepessoa = user, nome = nome)))
                 
-    return render_template('opt.html', nomepessoa = user, nome = nome)
+    
     
 @app.route('/user', methods=['POST', 'GET'])
 def usuario():
     user=request.args['user']
     
-    return render_template('user.html', cao=h)
+    
     
 @app.route('/adotar', methods=['POST', 'GET'])
 def adotar():
     user=request.args['user']
     button = request.form['button']
+    print (ListadogDoar)
+    h=choice(eval(PETinder.get_sync(point = "/ListadogDoar", data=ListadogDoar)))
     if request.method == 'POST':
         print ("foi")
         if button == "adotar":
             return render_template('adote.html')
         
         
-    return render_template('adotar.html')
+    return render_template('adotar.html', cao = h, user = user, nome = nome)
     
 @app.route('/adote', methods=['POST', 'GET'])
 def adote():
@@ -286,7 +291,14 @@ def adote():
         caesad=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user, f)))
         listaadote.append(caesad)
     return render_template('adote.html', caesad=caesad)
+
+@app.route('/deletaBR', methods=['POST', 'GET']) 
+def delete1():
+    user=request.args['user']
+
     
+    #apos finalizar o tratamento, volta para a pagina principal
+    return redirect(url_for('main'))   
 
 if __name__ == '__main__':
     app.run(debug=True, host= '0.0.0.0', port=5000)   
