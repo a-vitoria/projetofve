@@ -255,14 +255,15 @@ def opt():
         
         h=choice(eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR)))
         
-        return render_template('opt.html', caes = h, dic = (eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR))))
+        return render_template('opt.html', cao = h, dic = (eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR))))
                 
     return render_template('opt.html', nomepessoa = user, nome = nome)
     
-@app.route('/opt/usuario', methods=['POST', 'GET'])
+@app.route('/user', methods=['POST', 'GET'])
 def usuario():
     user=request.args['user']
-    return render_template('user.html')
+    
+    return render_template('user.html', cao=h)
     
 @app.route('/adotar', methods=['POST', 'GET'])
 def adotar():
@@ -276,7 +277,7 @@ def adotar():
         
     return render_template('adotar.html')
     
-@app.route('/adotar/adote', methods=['POST', 'GET'])
+@app.route('/adote', methods=['POST', 'GET'])
 def adote():
     user=request.args['user']
     adot=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar".format(user)))

@@ -18,6 +18,7 @@
 
 </head>
 
+
 <body>
 <div class="grid">
 <div class="col_2"></div>
@@ -33,7 +34,7 @@
 <br></br>
 <br></br>
 </div>
-<form class="vertical" method="POST" action="/adotar?user={{ nomepessoa }}&cao={{ nome }}">
+<form class="vertical" method="POST" action="/adotar?user={{ nomepessoa }}&nome={{ nome }}&cao={{ h }}">
 <div class="col_8">
 <img class="caption" title=	{% for e in dic: %}
 {{ dic[e].nome }}, {{ dic[e].idade }} anos, {{ dic[e].cidade }}
@@ -45,7 +46,7 @@
 <br></br>
 <br></br>
 <br></br>
-<a href="/adotar?user={{ nomepessoa }}&cao={{ nome }}"><img src="prox.png" /></a>
+<a href="/adotar?user={{ nomepessoa }}&nome={{ nome }}&cao={{ h }}"><img src="prox.png" /></a>
 </div>
 <center><button name="button" value="adotar" class="button orange"><i class="large"><i class="pill"><i class="fa fa-heart"></i></i></i> Adotar esse!</button></center></form>
 </div></div></div>
