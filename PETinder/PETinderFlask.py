@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect
-from random import choice
+import random
 import firecall
 #
 PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
@@ -252,15 +252,15 @@ def opt():
     user=request.args['user']
     nome=request.args['nome']
     print("quase foi")
-    cachorros=(eval(PETinder.get_sync(point = "/ListadogBR", data=ListadogBR)))
+    cachorros=(eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(random.choice), data=ListadogBR)))
     print (cachorros)
-    h=choice(cachorros)
+    h = cachorros
     if request.method == 'POST':
         print("foi")
         
-        h=choice(eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR)))
+        h=random.choice(eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR)))
         
-    return render_template('opt.html', cao = h, dic = (eval(PETinder.get_sync(point = "/ListadogBR", data=ListadogBR), nomepessoa = user, nome = nome)))
+    return render_template('opt.html', cao = h, dic = (eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(random.choice), data=ListadogBR), nomepessoa = user, nome = nome)))
                 
     
     
@@ -276,7 +276,7 @@ def adotar():
     nome=request.args['nome']
     button = request.form['button']
     print (ListadogDoar)
-    h=choice(eval(PETinder.get_sync(point = "/ListadogDoar", data=ListadogDoar)))
+    h=random.choice(eval(PETinder.get_sync(point = "/ListadogDoar", data=ListadogDoar)))
     if request.method == 'POST':
         print ("foi")
         if button == "adotar":
