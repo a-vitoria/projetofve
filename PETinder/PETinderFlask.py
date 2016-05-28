@@ -271,8 +271,7 @@ def opt():
     
 @app.route('/user', methods=['POST', 'GET'])
 def usuario():
-    user=request.args['user']
-    
+    user=request.args['user']    
     
     
 @app.route('/adotar', methods=['POST', 'GET'])
@@ -282,19 +281,18 @@ def adotar():
     cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
     sorte=random.choice(list(cachorros.keys()))      
     
-        
-        
     return render_template('adotar.html', user=user, cao=sorte)
     
 @app.route('/adote', methods=['POST', 'GET'])
 def adote():
     user=request.args['user']
+    cao = request.args['cao']
     adot=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar".format(user)))
     listaadote=[]    
     for f in adot:
         caesad=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user, f)))
         listaadote.append(caesad)
-    return render_template('adote.html', caesad=caesad, user=user, cao=sorte)
+    return render_template('adote.html', caesad=caesad, user=user, cao=cao)
 
 @app.route('/del', methods=['POST', 'GET']) 
 def delete1():
