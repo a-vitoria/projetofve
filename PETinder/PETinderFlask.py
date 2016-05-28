@@ -63,8 +63,10 @@ class CaesBR(Caes):
         self.dicionariocaosex["saude"]=self.saude
         self.dicionariocaosex["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogBR.append(self.dicionariocaosex)
+        dogBR.append(self.nome)
         PETinder.put_sync(point="/Pessoas/{0}/Caes_BR/{1}".format(user,self.nome),data=self.dicionariocaosex)
         PETinder.put_sync(point="/ListadogBR/{0}".format(self.nome),data=ListadogBR[-1])
+        PETinder.put_sync(point="/dogBR",data=dogBR)
         
 def Del_CaesBR(nome):
     print (nome)
@@ -89,8 +91,11 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["saude"]=self.saude
         self.dicionariocaodoa["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogDoar.append(self.dicionariocaodoa)
+        dogDoar.append(self.nome)
         PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user,self.nome),data=self.dicionariocaodoa)
         PETinder.put_sync(point="/ListadogDoar/{0}".format(self.nome),data=ListadogDoar[-1])
+        PETinder.put_sync(point="/dogDoar",data=dogDoar)
+        
 def Del_CaesDoar(nome):
     dono=eval(PETinder.get_sync("/ListadogDoar/{0}/nomepessoa".format(nome)))
     PETinder.delete_sync(point="Pessoas/{0}/CaesDoar/{1}".format(dono,nome))
@@ -277,7 +282,8 @@ def adotar():
     nome=request.args['nome']
     button = request.form['button']
     print (ListadogDoar)
-    h=random.choice(eval(PETinder.get_sync(point = "/ListadogDoar", data=ListadogDoar)))
+    escolha=random.choice(PETinder.get(point="/dogDoar"))
+    h=(eval(PETinder.get_sync(point = "/ListadogDoar/{0}".format(escolha))))
     if request.method == 'POST':
         print ("foi")
         if button == "adotar":
