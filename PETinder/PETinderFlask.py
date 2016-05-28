@@ -199,6 +199,7 @@ def home():
   
     button=request.form['button']
     user=request.args['user']
+    
     print (ListadogBR)
     
     if request.method == 'POST':
@@ -220,7 +221,9 @@ def home():
                 return render_template('doar.html', nomepessoa = user)
         
         elif button == "adotar":
-            return render_template('adotar.html', nomepessoa = user )
+            cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
+            sorte=random.choice(list(cachorros.keys()))    
+            return redirect(url_for('adotar', user=user, cao=sorte ))
             
     return render_template('home.html', nomepessoa = user)
         
@@ -275,20 +278,13 @@ def usuario():
 @app.route('/adotar', methods=['POST', 'GET'])
 def adotar():
     user=request.args['user']
-    nome=request.args['nome']
-    button = request.form['button']
     print (ListadogDoar)
     cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
-    sorte=random.choice(list(cachorros.keys()))    
-    caninos=(eval(PETinder.get_sync(point = "/ListadogDoar/{0}".format(sorte))))    
-    h=caninos
-    if request.method == 'POST':
-        print ("foi")
-        if button == "adotar":
-            return render_template('adote.html')
+    sorte=random.choice(list(cachorros.keys()))      
+    
         
         
-    return render_template('adotar.html', cao = h, user = user, nome = nome)
+    return render_template('adotar.html', user=user, cao=sorte)
     
 @app.route('/adote', methods=['POST', 'GET'])
 def adote():
@@ -298,7 +294,7 @@ def adote():
     for f in adot:
         caesad=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user, f)))
         listaadote.append(caesad)
-    return render_template('adote.html', caesad=caesad)
+    return render_template('adote.html', caesad=caesad, user=user, cao=sorte)
 
 @app.route('/del', methods=['POST', 'GET']) 
 def delete1():
