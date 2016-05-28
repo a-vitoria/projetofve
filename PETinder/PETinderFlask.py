@@ -3,8 +3,6 @@ import random
 import firecall
 #
 PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
-dogBR=[]
-dogDoar=[]
 USER=[]
 NOME=[]
 ListadogBR=[]
@@ -63,10 +61,8 @@ class CaesBR(Caes):
         self.dicionariocaosex["saude"]=self.saude
         self.dicionariocaosex["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogBR.append(self.dicionariocaosex)
-        dogBR.append(self.nome)
         PETinder.put_sync(point="/Pessoas/{0}/Caes_BR/{1}".format(user,self.nome),data=self.dicionariocaosex)
         PETinder.put_sync(point="/ListadogBR/{0}".format(self.nome),data=ListadogBR[-1])
-        PETinder.put_sync(point="/dogBR",data=dogBR)
         
 def Del_CaesBR(nome):
     print (nome)
@@ -91,10 +87,8 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["saude"]=self.saude
         self.dicionariocaodoa["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogDoar.append(self.dicionariocaodoa)
-        dogDoar.append(self.nome)
         PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user,self.nome),data=self.dicionariocaodoa)
         PETinder.put_sync(point="/ListadogDoar/{0}".format(self.nome),data=ListadogDoar[-1])
-        PETinder.put_sync(point="/dogDoar",data=dogDoar)
         
 def Del_CaesDoar(nome):
     dono=eval(PETinder.get_sync("/ListadogDoar/{0}/nomepessoa".format(nome)))
@@ -258,9 +252,11 @@ def opt():
     user=request.args['user']
     nome=request.args['nome']
     print("quase foi")
-    cachorros=(eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(random.choice), data=ListadogBR)))
+    cachorros=(eval(PETinder.get_sync(point = "/ListadogBR")))
     print (cachorros)
-    h = cachorros
+    sorte=random.choice(list(cachorros.keys()))
+    caninos=(eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(sorte))))
+    h = caninos
     if request.method == 'POST':
         print("foi")
         
@@ -282,8 +278,10 @@ def adotar():
     nome=request.args['nome']
     button = request.form['button']
     print (ListadogDoar)
-    escolha=random.choice(PETinder.get(point="/dogDoar"))
-    h=(eval(PETinder.get_sync(point = "/ListadogDoar/{0}".format(escolha))))
+    cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
+    sorte=random.choice(list(cachorros.keys()))    
+    caninos=(eval(PETinder.get_sync(point = "/ListadogDoar/{0}".format(sorte))))    
+    h=caninos
     if request.method == 'POST':
         print ("foi")
         if button == "adotar":
