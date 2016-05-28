@@ -67,7 +67,8 @@ class CaesBR(Caes):
         PETinder.put_sync(point="/ListadogBR/{0}".format(self.nome),data=ListadogBR[-1])
         
 def Del_CaesBR(nome):
-    dono=eval(PETinder.get("/ListadogBR/{0}/nomepessoa".format(nome)))
+    print (nome)
+    dono=eval(PETinder.get_sync("/ListadogBR/{0}/nomepessoa".format(nome)))
     PETinder.delete_sync(point="Pessoas/{0}/Caes_BR/{1}".format(dono,nome))
     PETinder.delete_sync(point="ListadogDoar/{0}".format(nome))
 
@@ -91,7 +92,7 @@ class CaesDoar(Caes):
         PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user,self.nome),data=self.dicionariocaodoa)
         PETinder.put_sync(point="/ListadogDoar/{0}".format(self.nome),data=ListadogDoar[-1])
 def Del_CaesDoar(nome):
-    dono=eval(PETinder.get("/ListadogDoar/{0}/nomepessoa".format(nome)))
+    dono=eval(PETinder.get_sync("/ListadogDoar/{0}/nomepessoa".format(nome)))
     PETinder.delete_sync(point="Pessoas/{0}/CaesDoar/{1}".format(dono,nome))
     PETinder.delete_sync(point="ListadogDoar/{0}".format(nome))
 
@@ -298,8 +299,9 @@ def adote():
 @app.route('/del', methods=['POST', 'GET']) 
 def delete1():
     nome=request.args['nome']
+    print(nome)
     Del_CaesBR(nome)
-    Del_CaesDoar(nome)
+#    Del_CaesDoar(nome)
     
     #apos finalizar o tratamento, volta para a pagina principal
     return redirect(url_for('main'))   
