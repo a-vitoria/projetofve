@@ -252,8 +252,9 @@ def opt():
     user=request.args['user']
     nome=request.args['nome']
     print("quase foi")
-    print (ListadogBR)
-    h=choice(eval(PETinder.get_sync(point = "/ListadogBR", data=ListadogBR)))
+    cachorros=(eval(PETinder.get_sync(point = "/ListadogBR", data=ListadogBR)))
+    print (cachorros)
+    h=choice(cachorros)
     if request.method == 'POST':
         print("foi")
         
