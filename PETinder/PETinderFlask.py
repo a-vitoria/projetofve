@@ -70,7 +70,7 @@ def Del_CaesBR(nome):
     print (nome)
     dono=eval(PETinder.get_sync("/ListadogBR/{0}/nomepessoa".format(nome)))
     PETinder.delete_sync(point="Pessoas/{0}/Caes_BR/{1}".format(dono,nome))
-    PETinder.delete_sync(point="ListadogDoar/{0}".format(nome))
+    PETinder.delete_sync(point="ListadogBR/{0}".format(nome))
 
         
         
@@ -304,7 +304,7 @@ def delete1():
 #    Del_CaesDoar(nome)
     
     #apos finalizar o tratamento, volta para a pagina principal
-    return redirect(url_for('main'))   
+    return redirect(url_for('perfil'))   
 
 if __name__ == '__main__':
     app.run(debug=True, host= '0.0.0.0', port=5000)   
