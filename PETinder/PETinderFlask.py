@@ -156,6 +156,11 @@ def conta():
         email = request.form['email'] #Recebe email do HTML
         senha = request.form['senha'] #Recebe senha do HTML
         use= eval(PETinder.get_sync(point="/ListaUSER")) #Chama ListaUSER do firebase
+        mail=[]        
+        for p in use:        
+            usemail=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(p)))
+            mail.append(usemail)
+            
         #Condições de cadastro do usuário:
         if nomepessoa in use:
             e = 'Usuário já cadastrado'
@@ -163,6 +168,9 @@ def conta():
         elif email == "":
             e = 'O campo Email está vazio'
             return render_template('loginemail.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
+        elif email in mail:
+            e = 'Email já cadastrado'
+            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         elif senha == "":
             e = 'O campo Senha está vazio'
             return render_template('loginsenha.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)        
@@ -365,7 +373,7 @@ def adotar():
     cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
     sorte=random.choice(list(cachorros.keys()))
     while (eval(PETinder.get_sync(point="/ListadogDoar/{0}/nomepessoa".format(sorte)))) == user:
-                sorte=random.choice(list(cachorros.keys()))            
+        sorte=random.choice(list(cachorros.keys()))           
     caesdoar= eval(PETinder.get_sync(point="/ListadogDoar/{0}".format(sorte)))
  
     return render_template('adotar.html', cao=sorte, caesdoar=caesdoar, user=user)
