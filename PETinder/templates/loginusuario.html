@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- META -->
+	<title>PETinder</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content="" />
+	
+	<!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="css/kickstart.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="style.css" media="all" /> 
+	
+	<!-- Javascript -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/kickstart.js"></script>
+</head>
+<body>
+<div class="grid">
+<div class="col_2"></div>
+<div class="col_8"><div style="background: #FFFFFF">
+<div style="border:10px; border-style:solid; border-color:orange; padding: 1em;">
+<center>
+<img src="cadastro.png"/></center>
+<form class="vertical" method="POST" action="/login">
+<br><label for="pessoa"><strong><h6><font color="orange">Nome</font></strong></h6></label>
+</br>
+<input name="pessoa" id="pessoa" type="text" placeholder="Ex: Carlos Drummond de Andrade" />
+<br></br>
+<br><label for="nomepessoa"><strong><h6><font color="orange">Crie um nome de usuário</font></strong></h6></label>
+</br>
+<label for="nomepessoa" class="error">O campo usuário está em branco!</label>
+<input class="error" name="nomepessoa" id="nomepessoa" type="text" placeholder="Ex: carlos_drummond, carlosdrummond1 (não use ponto final)" />
+<br></br>
+<br><label for="email"><strong><h6><font color="orange">E-mail</font></strong></h6></label>
+</br>
+<input name="email" id="email" type="text" placeholder="Ex: carlosdrummond@deandrade.com.br" />
+<br></br>
+<br><label for="senha"><strong><h6><font color="orange">Crie uma senha</font></strong></h6></label>
+</br>
+<input name="senha" id="senha" type="password" maxlength="10" size="10"/>
+<br></br>
+<div align="right"><button class="button orange"><i class="large"><i class="pill"><i class="fa fa-paw"></i></i></i> Cadastrar</button>
+</form></div></div>
+<div class="col_2"></div></div>
+<!-- End Grid -->
+</body>
+</html>

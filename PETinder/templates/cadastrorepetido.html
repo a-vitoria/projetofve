@@ -25,7 +25,8 @@
 <form class="vertical" method="POST" action="/cadastro?user={{ nomepessoa }}">
 <br><label for="nome"><strong><h6><font color="orange">Nome</font></strong></h6></label>
 </br>
-<input name="nome" id="nome" type="text" placeholder="Ex: Rex" />
+<label for="nome" class="error">Cão já cadastrado!</label>
+<input class="error" name="nome" id="nome" type="text" placeholder="Ex: Rex" />
 <br></br>
 <br><label for="foto"><strong><h6><font color="orange">Foto</font></strong></h6></label>
 </br>
@@ -37,7 +38,7 @@
 <br></br>
 <br><label for="sexo"><strong><h6><font color="orange">Sexo</font></strong></h6></label>
 </br>
-<select required name="sexo" id="sexo">
+<select name="sexo" id="sexo">
 <option value="0">-- Escolha --</option>
 <option value="Masculino">Masculino</option>
 <option value="Feminino">Feminino</option>

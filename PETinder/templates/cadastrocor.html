@@ -37,7 +37,7 @@
 <br></br>
 <br><label for="sexo"><strong><h6><font color="orange">Sexo</font></strong></h6></label>
 </br>
-<select required name="sexo" id="sexo">
+<select name="sexo" id="sexo">
 <option value="0">-- Escolha --</option>
 <option value="Masculino">Masculino</option>
 <option value="Feminino">Feminino</option>
@@ -53,7 +53,8 @@
 <br></br>
 <br><label for="cor"><strong><h6><font color="orange">Cor</font></strong></h6></label>
 </br>
-<input name="cor" id="cor" type="text" placeholder="Ex: Branco" />
+<label for="cor" class="error">O campo cor está em branco!</label>
+<input class="error" name="cor" id="cor" type="text" placeholder="Ex: Branco" />
 <br></br>
 <br><label for="saude"><strong><h6><font color="orange">Situação de saúde</font></strong></h6></label>
 </br>

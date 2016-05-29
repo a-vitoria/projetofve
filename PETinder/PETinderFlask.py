@@ -139,10 +139,10 @@ def firstpage():
             else: 
                 e = 'Senha incorreta'
                 
-                return render_template('main.html', nomepessoa=nomepessoa, dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e) 
+                return render_template('mainerro.html', nomepessoa=nomepessoa, dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e) 
         else:
             e = 'Usuário inválido'
-            return render_template('main.html', nomepessoa=nomepessoa, dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
+            return render_template('mainerro.html', nomepessoa=nomepessoa, dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
 
     return render_template('main.html', pessoa = Pessoa('','','',''))        
 
@@ -159,19 +159,19 @@ def conta():
         #Condições de cadastro do usuário:
         if nomepessoa in use:
             e = 'Usuário já cadastrado'
-            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
+            return render_template('loginrepetido.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         elif email == "":
             e = 'O campo Email está vazio'
-            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
+            return render_template('loginemail.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         elif senha == "":
             e = 'O campo Senha está vazio'
-            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)        
+            return render_template('loginsenha.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)        
         elif nomepessoa == "":
             e = 'O campo Usuário está vazio'
-            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)        
+            return render_template('loginusuario.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)        
         elif nome == "":
             e = 'O campo Nome está vazio'
-            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
+            return render_template('loginnome.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         else:
             #Cadastro o novo usuário e manda as informações para o firebase
             USER.append(nomepessoa)
@@ -199,25 +199,25 @@ def cadastro():
         #Condições de cadastro do cão:
         if nome in use:
             e = 'Cão já cadastrado'
-            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
+            return render_template('cadastrorepetido.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         elif nome == "":
             e = 'O campo Nome está vazio'
-            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
+            return render_template('cadastronome.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         elif raca == "":
             e = 'O campo Raça está vazio'
-            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)       
+            return render_template('cadastroraca.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)       
         elif sexo == 0:
             e = 'O campo Sexo deve ser selecionado'
             return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)        
         elif cidade == "":
             e = 'O campo Cidade está vazio'
-            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
+            return render_template('cadastrocidade.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         elif idade == "":
             e = 'O campo Idade está vazio'
-            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
+            return render_template('cadastroidade.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         elif cor == "":
             e = 'O campo Cor está vazio'
-            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
+            return render_template('cadastrocor.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         else:
             #Cadastra o novo cão do usuário logado e manda as informações para o firebase
             NOME.append(nome)
@@ -241,28 +241,28 @@ def caddoar():
         idade = request.form['idade']
         cor = request.form['cor']
         saude = request.form['saude']
-        use=eval(PETinder.get_sync(point="/ListadogBR"))
+        use=eval(PETinder.get_sync(point="/ListadogDoar"))
         if nome in use:
             e = 'Usuário já cadastrado'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
+            return render_template('caddoarrepetido.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         elif nome == "":
             e = 'O campo Nome está vazio'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
+            return render_template('caddoarnome.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         elif raca == "":
             e = 'O campo raca está vazio'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)       
+            return render_template('caddoarraca.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)       
         elif sexo == 0:
             e = 'O campo sexo deve ser selecionado'
             return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)        
         elif cidade == "":
             e = 'O campo cidade está vazio'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
+            return render_template('caddoarcidade.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         elif idade == "":
             e = 'O campo idade está vazio'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
+            return render_template('caddoaridade.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         elif cor == "":
             e = 'O campo cor está vazio'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
+            return render_template('caddoarcor.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         else:
             NOME.append(nome)
             NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)

@@ -22,7 +22,7 @@
 <div style="border:10px; border-style:solid; border-color:orange; padding: 1em;">
 <center>
 <img src="cadastro.png"/></center>
-<form class="vertical" method="POST" action="/cadastro?user={{ nomepessoa }}">
+<form class="vertical" method="POST" action="/caddoar?user={{ nomepessoa }}">
 <br><label for="nome"><strong><h6><font color="orange">Nome</font></strong></h6></label>
 </br>
 <input name="nome" id="nome" type="text" placeholder="Ex: Rex" />
@@ -37,7 +37,7 @@
 <br></br>
 <br><label for="sexo"><strong><h6><font color="orange">Sexo</font></strong></h6></label>
 </br>
-<select required name="sexo" id="sexo">
+<select name="sexo" id="sexo">
 <option value="0">-- Escolha --</option>
 <option value="Masculino">Masculino</option>
 <option value="Feminino">Feminino</option>
@@ -45,7 +45,8 @@
 <br></br>
 <br><label for="cidade"><strong><h6><font color="orange">Cidade</font></strong></h6></label>
 </br>
-<input name="cidade" id="cidade" type="text" placeholder="Ex: São Paulo" />
+<label for="cidade" class="error">O campo cidade está em branco!</label>
+<input class="error" name="cidade" id="cidade" type="text" placeholder="Ex: São Paulo" />
 <br></br>
 <br><label for="idade"><strong><h6><font color="orange">Idade</font></strong></h6></label>
 </br>
@@ -60,7 +61,7 @@
 <br></br>
 <textarea name="saude" id="saude" placeholder="Cite aqui se o seu PET tiver alguma doença hereditária ou sofrer de algum problema de saúde crônico"></textarea>
 <br></br>
-<div align="right"><button class="button orange"><i class="large"><i class="pill"><i class="fa fa-paw"></i></i></i> Cadastrar</button>
+<div align="right"><button class="button orange"><i class="large"><i class="pill"><i class="fa fa-paw"></i></i></i> Doar</button>
 </form></div></div></div></div>
 <div class="col_2"></div></div>
 <!-- End Grid -->
