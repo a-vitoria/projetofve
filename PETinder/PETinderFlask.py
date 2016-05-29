@@ -274,7 +274,7 @@ def opt():
         
         h=random.choice(eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR)))
         
-    return render_template('opt.html', cao = h, dic = (eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(random.choice), data=ListadogBR), nomepessoa = user, nome = nome)))
+    return render_template('opt.html', cao = h, dic = caninos, nomepessoa = user, nome = nome)
                 
     
     
