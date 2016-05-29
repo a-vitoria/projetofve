@@ -9,16 +9,12 @@ ListadogBR=[]
 ListadogDoar=[]
 
 def Del_CaesBR(nome):
-    print(nome)
     dono=(PETinder.get_sync("/ListadogBR/{0}/nomepessoa".format(nome)))
-    print(dono)
     PETinder.delete_sync(point="Pessoas/{0}/Caes_BR/{1}".format(dono,nome))
     PETinder.delete_sync(point="ListadogBR/{0}".format(nome))
 
 def Del_CaesDoar(nome):
-    print(nome)
     dono=(PETinder.get_sync("/ListadogDoar/{0}/nomepessoa".format(nome)))
-    print (dono)
     PETinder.delete_sync(point="Pessoas/{0}/CaesDoar/{1}".format(dono,nome))
     PETinder.delete_sync(point="ListadogDoar/{0}".format(nome))
 
@@ -209,7 +205,6 @@ def home():
     button=request.form['button']
     user=request.args['user']
     
-    print (ListadogBR)
     
     if request.method == 'POST':
         
@@ -263,14 +258,11 @@ def doar():
 def opt():
     user=request.args['user']
     nome=request.args['nome']
-    print("quase foi")
     cachorros=(eval(PETinder.get_sync(point = "/ListadogBR")))
-    print (cachorros)
     sorte=random.choice(list(cachorros.keys()))
     caninos=(eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(sorte))))
     h = caninos
     if request.method == 'POST':
-        print("foi")
         
         h=random.choice(eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR)))
         
@@ -286,7 +278,6 @@ def usuario():
 @app.route('/adotar', methods=['POST', 'GET'])
 def adotar():
     user=request.args['user']
-    print (ListadogDoar)
     cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
     sorte=random.choice(list(cachorros.keys()))
     caesdoar= eval(PETinder.get_sync(point="/ListadogDoar/{0}".format(sorte)))
