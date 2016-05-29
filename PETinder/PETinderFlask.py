@@ -166,11 +166,33 @@ def cadastro():
         idade = request.form['idade']
         cor = request.form['cor']
         saude = request.form['saude']
-        
-        NOME.append(nome)
-        NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
-        NOME[-1].Salvar_CaesBR(user)
-        return redirect(url_for('perfil', user=user))
+        use=eval(PETinder.get_sync(point="/ListadogBR"))
+        if nome in use:
+            e = 'Usuário já cadastrado'
+            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
+        elif nome == "":
+            e = 'O campo Nome está vazio'
+            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
+        elif raca == "":
+            e = 'O campo raca está vazio'
+            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)       
+        elif sexo == 0:
+            e = 'O campo sexo deve ser selecionado'
+            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)        
+        elif cidade == "":
+            e = 'O campo cidade está vazio'
+            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
+        elif idade == "":
+            e = 'O campo idade está vazio'
+            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
+        elif cor == "":
+            e = 'O campo cor está vazio'
+            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
+        else:
+            NOME.append(nome)
+            NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
+            NOME[-1].Salvar_CaesBR(user)
+            return redirect(url_for('perfil', user=user))
 
     return render_template('cadastro.html',nomepessoa = user, erro = '')
     
@@ -187,10 +209,33 @@ def caddoar():
         idade = request.form['idade']
         cor = request.form['cor']
         saude = request.form['saude']
-        NOME.append(nome)
-        NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
-        NOME[-1].Salvar_CaesDoar(user)
-        return redirect(url_for('doar', user=user))
+        use=eval(PETinder.get_sync(point="/ListadogBR"))
+        if nome in use:
+            e = 'Usuário já cadastrado'
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)
+        elif nome == "":
+            e = 'O campo Nome está vazio'
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)
+        elif raca == "":
+            e = 'O campo raca está vazio'
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)       
+        elif sexo == 0:
+            e = 'O campo sexo deve ser selecionado'
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)        
+        elif cidade == "":
+            e = 'O campo cidade está vazio'
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)
+        elif idade == "":
+            e = 'O campo idade está vazio'
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)
+        elif cor == "":
+            e = 'O campo cor está vazio'
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)
+        else:
+            NOME.append(nome)
+            NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
+            NOME[-1].Salvar_CaesDoar(user)
+            return redirect(url_for('doar', user=user))
         
    
     return render_template('caddoar.html', nomepessoa = user, erro = '')
@@ -223,6 +268,8 @@ def home():
         elif button == "adotar":
             cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
             sorte=random.choice(list(cachorros.keys()))    
+            while (eval(PETinder.get_sync(point="/ListadogDoar/{0}/nomepessoa".format(sorte)))) == user:
+                sorte=random.choice(list(cachorros.keys()))                
             return redirect(url_for('adotar', user=user, cao=sorte ))
             
     return render_template('home.html', nomepessoa = user)
@@ -261,6 +308,9 @@ def opt():
     user=request.args['user']
     cachorros=(eval(PETinder.get_sync(point = "/ListadogBR")))
     sorte=random.choice(list(cachorros.keys()))
+    while (eval(PETinder.get_sync(point="/ListadogBR/{0}/nomepessoa".format(sorte)))) == user:
+                sorte=random.choice(list(cachorros.keys()))            
+    
     caninos=(eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(sorte))))
         
     return render_template('opt.html', cao = sorte, caninos = caninos, nomepessoa = user)
@@ -280,6 +330,8 @@ def adotar():
     user=request.args['user']
     cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
     sorte=random.choice(list(cachorros.keys()))
+    while (eval(PETinder.get_sync(point="/ListadogDoar/{0}/nomepessoa".format(sorte)))) == user:
+                sorte=random.choice(list(cachorros.keys()))            
     caesdoar= eval(PETinder.get_sync(point="/ListadogDoar/{0}".format(sorte)))
  
     return render_template('adotar.html', cao=sorte, caesdoar=caesdoar, user=user)
