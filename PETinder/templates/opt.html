@@ -33,11 +33,11 @@
 <br></br>
 <br></br>
 </div>
-<form class="vertical" method="POST" action="/opt?user={{ nomepessoa }}&nome={{ nome }}&cao={{ h }}">
 <div class="col_8">
-<img class="caption" title="	{% for e in dic: %}
-{{ dic[e].nome }}, {{ dic[e].idade }} anos, {{ dic[e].cidade }}
-{% endfor %}" src="teste1.jpg" />
+<img src="teste1.jpg" />
+<br><strong>Nome:</strong> {{ caninos.nome }}
+<br><strong>Idade:</strong> {{ caninos.idade }}
+<br><strong>Cidade:</strong> {{ caninos.cidade }}
 </div>
 <div class="col_2">
 <br></br>
@@ -45,9 +45,10 @@
 <br></br>
 <br></br>
 <br></br>
-<a href="/opt?user={{ nomepessoa }}&nome={{ nome }}&cao={{ h }}"><img src="prox.png" /></a>
+<a href="/opt?user={{ nomepessoa }}&cao={{ sorte }}"><img src="prox.png" /></a>
 </div>
-<center><button nome="button" value="escolher" class="button orange"><i class="large"><i class="pill"><i class="fa fa-heart"></i></i></i> Quero esse!</button></center></form>
+<a href="/user?user={{ user }}&cao={{ cao }}">
+<center><button nome="button" value="escolher" class="button orange"><i class="large"><i class="pill"><i class="fa fa-heart"></i></i></i> Quero esse!</button></center></a>
 </div></div></div>
 <div class="col_2"></div></div>
 

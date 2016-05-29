@@ -30,7 +30,7 @@
 </div>
 <div class="col_8">
 <form action="/adote?user={{ user }}&cao={{ cao }}">
-<img class="caption" src="teste2.jpg" />
+<img src="teste2.jpg" />
 </div>
 <div class="col_2">
 <br></br>
@@ -45,17 +45,17 @@
 <br></br>
 <br></br>
 </div>
-{% for e in name: %}
-<br><strong>Nome:</strong> {{ name[e].cao }}
-<br><strong>Idade:</strong> {{ name[e].idade }} anos
-<br><strong>Cidade:</strong> {{ name[e].cidade }}
-<br><strong>Raça:</strong> {{ name[e].raca }}
-<br><strong>Sexo:</strong> {{ name[e].sexo }}
-<br><strong>Cor:</strong> {{ name[e].cor }}
-<br><strong>Situação de saúde:</strong> {{ name[e].saude }}
-<br><strong>E-mail p/ contato:</strong> {{ name[e].email }}
-{% endfor %}
+<br><strong>Nome:</strong> {{ name.nome }}
+<br><strong>Idade:</strong> {{ name.idade }}
+<br><strong>Cidade:</strong> {{ name.cidade }}
+<br><strong>Raça:</strong> {{ name.raca }}
+<br><strong>Sexo:</strong> {{ name.sexo }}
+<br><strong>Cor:</strong> {{ name.cor }}
+<br><strong>Situação de saúde:</strong> {{ name.saude }}
+<br><strong>E-mail p/ contato:</strong> {{ name.email }}
 </br></br></br></br></br></br></br></form>
+<a href="/del?user={{ user }}&cao={{ cao }}">
+<div align="right"><button name="button" value="confirma" class="button orange"><i class="large"><i class="pill"><i class="fa fa-heart"></i></i></i>  Confirmar adoção!</button></a></div>
 </div></div></div>
 <div class="col_2"></div></div>
 

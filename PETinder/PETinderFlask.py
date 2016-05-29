@@ -9,19 +9,15 @@ ListadogBR=[]
 ListadogDoar=[]
 
 def Del_CaesBR(nome):
-    dono=(PETinder.get_sync("/ListadogBR/{0}/nomepessoa".format(nome)))
+    dono=eval(PETinder.get_sync(point="/ListadogBR/{0}/nomepessoa".format(nome)))
     PETinder.delete_sync(point="Pessoas/{0}/Caes_BR/{1}".format(dono,nome))
     PETinder.delete_sync(point="ListadogBR/{0}".format(nome))
 
 def Del_CaesDoar(nome):
-    dono=(PETinder.get_sync("/ListadogDoar/{0}/nomepessoa".format(nome)))
+    dono=eval(PETinder.get_sync(point="/ListadogDoar/{0}/nomepessoa".format(nome)))
     PETinder.delete_sync(point="Pessoas/{0}/CaesDoar/{1}".format(dono,nome))
     PETinder.delete_sync(point="ListadogDoar/{0}".format(nome))
-
-def Criar_dic(nome):
-    name=eval(PETinder.get_sync("/ListadogDoar/{0}".format(nome)))
-    return name
-
+    
         
 class Pessoa():
     
@@ -234,45 +230,49 @@ def home():
 @app.route('/perfil', methods=['POST', 'GET'])
 def perfil():
     user=request.args['user']
-    caesb= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR".format(user)))
-    listacaes=[]
-    for j in caesb:
-        caes=eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/{1}/nome".format(user, j)))
-        listacaes.append(caes)
+    try:
+        caesb= eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR".format(user)))
+        listacaes=[]
+        for j in caesb:
+            caes=eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/{1}/nome".format(user, j)))
+            listacaes.append(caes)
     #página que mostrará os animais cadastrados pelo usuário
-    return render_template('perfil.html', nomepessoa=user, caesb=caesb)
+            return render_template('perfil.html', nomepessoa=user, caesb=caesb)
+    except:
+        return render_template('perfil.html', nomepessoa=user)
     
 @app.route('/doar', methods=['POST', 'GET'])
 def doar():
     user=request.args['user']
-    caesdoar= eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar".format(user)))
-    listacaesd=[]
-    for i in caesdoar:
-        caesd=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar/{1}/nome".format(user, i)))
-        listacaesd.append(caesd)
-    #Listar_CaesDoar
-    #página que mostrará os animais cadastrados pelo usuário para doação
-    return render_template('doar.html', nomepessoa=user, caesdoar=caesdoar)
-    
+    try:
+        caesdoar= eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar".format(user)))
+        listacaesd=[]
+        for i in caesdoar:
+            caesd=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar/{1}/nome".format(user, i)))
+            listacaesd.append(caesd)
+            #Listar_CaesDoar
+            #página que mostrará os animais cadastrados pelo usuário para doação
+            return render_template('doar.html', nomepessoa=user, caesdoar=caesdoar)
+    except:
+        return render_template('doar.html', nomepessoa = user)
+        
 @app.route('/opt', methods=['POST', 'GET'])
 def opt():
     user=request.args['user']
-    nome=request.args['nome']
     cachorros=(eval(PETinder.get_sync(point = "/ListadogBR")))
     sorte=random.choice(list(cachorros.keys()))
     caninos=(eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(sorte))))
-    h = caninos
-    if request.method == 'POST':
         
-        h=random.choice(eval(PETinder.get_sync(point = "/ListadogBR",data=ListadogBR)))
-        
-    return render_template('opt.html', cao = h, dic = caninos, nomepessoa = user, nome = nome)
+    return render_template('opt.html', cao = sorte, caninos = caninos, nomepessoa = user)
                 
     
     
 @app.route('/user', methods=['POST', 'GET'])
 def usuario():
-    user=request.args['user']    
+    user=request.args['user']
+    cao = request.args['cao']
+    name=eval(PETinder.get_sync(point="/ListadogBR/{0}".format(cao)))
+    return render_template('user.html', user=user, cao=cao, name=name)
     
     
 @app.route('/adotar', methods=['POST', 'GET'])
@@ -281,14 +281,14 @@ def adotar():
     cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
     sorte=random.choice(list(cachorros.keys()))
     caesdoar= eval(PETinder.get_sync(point="/ListadogDoar/{0}".format(sorte)))
-        
-    return render_template('adotar.html', user=user, cao=sorte, caesdoar=caesdoar)
+ 
+    return render_template('adotar.html', cao=sorte, caesdoar=caesdoar, user=user)
     
 @app.route('/adote', methods=['POST', 'GET'])
 def adote():
     user=request.args['user']
     cao = request.args['cao']
-    name=Criar_dic(cao)    
+    name=eval(PETinder.get_sync(point="/ListadogDoar/{0}".format(cao)))
     return render_template('adote.html', user=user, cao=cao, name=name)
 
 @app.route('/del', methods=['POST', 'GET']) 

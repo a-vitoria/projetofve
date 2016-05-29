@@ -29,10 +29,8 @@
 <div class="col_2">
 </div>
 <div class="col_8">
-<form action="/user?cao={{ h }}">
-
-              <img class="caption"/>
-
+<form action="/user?user={{ user }}&cao={{ cao }}">
+<img src="teste1.jpg"/>
 </div>
 <div class="col_2">
 <br></br>
@@ -47,17 +45,17 @@
 <br></br>
 <br></br>
 </div>
-{% for e in dic: %}
-<br><strong>Nome:</strong> {{ dic[e].cao }}
-<br><strong>Idade:</strong> {{ dic[e].idade }} anos
-<br><strong>Cidade:</strong> {{ dic[e].cidade }}
-<br><strong>Raça:</strong> {{ dic[e].raca }}
-<br><strong>Sexo:</strong> {{ dic[e].sexo }}
-<br><strong>Cor:</strong> {{ dic[e].cor }}
-<br><strong>Situação de saúde:</strong> {{ dic[e].saude }}
-<br><strong>E-mail p/ contato:</strong> {{ dic[e].email }}
-{% endfor %}
+<br><strong>Nome:</strong> {{ name.nome }}
+<br><strong>Idade:</strong> {{ name.idade }}
+<br><strong>Cidade:</strong> {{ name.cidade }}
+<br><strong>Raça:</strong> {{ name.raca }}
+<br><strong>Sexo:</strong> {{ name.sexo }}
+<br><strong>Cor:</strong> {{ name.cor }}
+<br><strong>Situação de saúde:</strong> {{ name.saude }}
+<br><strong>E-mail p/ contato:</strong> {{ name.email }}
 </br></br></br></br></br></br></br></form>
+<a href="/deld?user={{ user }}&cao={{ cao }}">
+<div align="right"><button name="button" value="confirma" class="button orange"><i class="large"><i class="pill"><i class="fa fa-heart"></i></i></i>  Confirmar escolha!</button></a></div>
 </div></div></div>
 <div class="col_2"></div></div>
 
