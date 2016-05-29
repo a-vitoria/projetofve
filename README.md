@@ -6,8 +6,11 @@ pela pasta onde se encontra o arquivo PETinderFlask.py.
 Por exemplo, se a pasta projetofve está nos seus documentos você deve digitar no prompt:
 
 cd documents
+
 cd projetofve
+
 cd petinder
+
 python petinderflask.py
 
 e no seu navegador digitar na barra de endereços 127.0.0.1:5000

@@ -208,7 +208,7 @@ def cadastro():
             return render_template('cadastroraca.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)       
         elif sexo == "0":
             e = 'O campo Sexo deve ser selecionado'
-            return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)        
+            return render_template('cadastrosexo.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)        
         elif cidade == "":
             e = 'O campo Cidade está vazio'
             return render_template('cadastrocidade.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
@@ -254,7 +254,7 @@ def caddoar():
             return render_template('caddoarraca.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)       
         elif sexo == "0":
             e = 'O campo sexo deve ser selecionado'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)        
+            return render_template('caddoarsexo.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)        
         elif cidade == "":
             e = 'O campo cidade está vazio'
             return render_template('caddoarcidade.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
