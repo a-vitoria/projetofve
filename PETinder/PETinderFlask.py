@@ -100,11 +100,12 @@ app = Flask(__name__, static_url_path='')
 
 @app.route('/', methods=['POST','GET'])
 def firstpage():
-    
-    if request.method == 'POST':
-        nomepessoa = request.form['nomepessoa']
-        senha = request.form['senha']
-        L = eval(PETinder.get_sync(point="/ListaUSER"))
+    #LOGIN
+    if request.method == 'POST': #Quando o método for POST
+        nomepessoa = request.form['nomepessoa'] #Recebe nomepessoa do HTML
+        senha = request.form['senha'] #Recebe senha do HTML
+        L = eval(PETinder.get_sync(point="/ListaUSER")) #Chama ListaUSER do firebase
+        #Validação do login:
         if nomepessoa in L:
             listasenha=[]
             s= eval(PETinder.get_sync(point="/Pessoas/{0}/senha".format(nomepessoa)))
@@ -118,18 +119,20 @@ def firstpage():
         else:
             e = 'Usuário inválido'
             return render_template('main.html', nomepessoa=nomepessoa, dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
-#    el=request.args['email']
+
     return render_template('main.html', pessoa = Pessoa('','','',''))        
 
     
 @app.route('/login', methods=['POST','GET'])
 def conta():
+    #CADASTRO DO USUÁRIO
     if request.method == 'POST':
-        nome = request.form['pessoa']
-        nomepessoa = request.form['nomepessoa']
-        email = request.form['email']
-        senha = request.form['senha']
-        use= eval(PETinder.get_sync(point="/ListaUSER"))
+        nome = request.form['pessoa'] #Recebe pessoa do HTML como nome
+        nomepessoa = request.form['nomepessoa'] #Recebe nomepessoa do HTML
+        email = request.form['email'] #Recebe email do HTML
+        senha = request.form['senha'] #Recebe senha do HTML
+        use= eval(PETinder.get_sync(point="/ListaUSER")) #Chama ListaUSER do firebase
+        #Condições de cadastro do usuário:
         if nomepessoa in use:
             e = 'Usuário já cadastrado'
             return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
@@ -146,6 +149,7 @@ def conta():
             e = 'O campo Nome está vazio'
             return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         else:
+            #Cadastro o novo usuário e manda as informações para o firebase
             USER.append(nomepessoa)
             USER[-1] = Pessoa(nome , nomepessoa, email, senha)
             USER[-1].Salvar_Pessoa() 
@@ -156,39 +160,42 @@ def conta():
     
 @app.route('/cadastro', methods=['POST','GET'])
 def cadastro():
-    user=request.args['user']
+    #CADASTRO DE CÃES PARA ENCONTRAR PARCEIRO
+    user=request.args['user'] #Chama o usuário que está logado  
     if request.method=='POST':
 
-        nome = request.form['nome']
-        raca = request.form['raca']
-        sexo = request.form['sexo']
-        cidade = request.form['cidade']
-        idade = request.form['idade']
-        cor = request.form['cor']
-        saude = request.form['saude']
-        use=eval(PETinder.get_sync(point="/ListadogBR"))
+        nome = request.form['nome'] #Recebe nome do HTML
+        raca = request.form['raca'] #Recebe raca do HTML
+        sexo = request.form['sexo'] #Recebe sexo do HTML
+        cidade = request.form['cidade'] #Recebe cidade do HTML
+        idade = request.form['idade'] #Recebe idade do HTML
+        cor = request.form['cor'] #Recebe cor do HTML
+        saude = request.form['saude'] #Recebe saude do HTML
+        use=eval(PETinder.get_sync(point="/ListadogBR")) #Chama a ListadogBR do firebase
+        #Condições de cadastro do cão:
         if nome in use:
-            e = 'Usuário já cadastrado'
+            e = 'Cão já cadastrado'
             return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         elif nome == "":
             e = 'O campo Nome está vazio'
             return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         elif raca == "":
-            e = 'O campo raca está vazio'
+            e = 'O campo Raça está vazio'
             return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)       
         elif sexo == 0:
-            e = 'O campo sexo deve ser selecionado'
+            e = 'O campo Sexo deve ser selecionado'
             return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)        
         elif cidade == "":
-            e = 'O campo cidade está vazio'
+            e = 'O campo Cidade está vazio'
             return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         elif idade == "":
-            e = 'O campo idade está vazio'
+            e = 'O campo Idade está vazio'
             return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         elif cor == "":
-            e = 'O campo cor está vazio'
+            e = 'O campo Cor está vazio'
             return render_template('cadastro.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         else:
+            #Cadastra o novo cão do usuário logado e manda as informações para o firebase
             NOME.append(nome)
             NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
             NOME[-1].Salvar_CaesBR(user)
@@ -200,6 +207,7 @@ def cadastro():
     
 @app.route('/caddoar', methods=['POST','GET'])
 def caddoar():
+    #CADASTRO DE CÃES PARA DOAR
     user=request.args['user']
     if request.method == 'POST':     
         nome = request.form['nome']
