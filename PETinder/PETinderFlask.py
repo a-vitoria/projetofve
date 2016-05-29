@@ -66,7 +66,7 @@ class CaesBR(Caes):
         
 def Del_CaesBR(nome):
     print(nome)
-    dono=eval(PETinder.get_sync("/ListadogBR/{0}/nomepessoa".format(nome)))
+    dono=(PETinder.get_sync("/ListadogBR/{0}/nomepessoa".format(nome)))
     print(dono)
     PETinder.delete_sync(point="Pessoas/{0}/Caes_BR/{1}".format(dono,nome))
     PETinder.delete_sync(point="ListadogBR/{0}".format(nome))
@@ -93,7 +93,7 @@ class CaesDoar(Caes):
         
 def Del_CaesDoar(nome):
     print(nome)
-    dono=eval(PETinder.get_sync("/ListadogDoar/{0}/nomepessoa".format(nome)))
+    dono=(PETinder.get_sync("/ListadogDoar/{0}/nomepessoa".format(nome)))
     print (dono)
     PETinder.delete_sync(point="Pessoas/{0}/CaesDoar/{1}".format(dono,nome))
     PETinder.delete_sync(point="ListadogDoar/{0}".format(nome))
@@ -282,9 +282,10 @@ def adotar():
     user=request.args['user']
     print (ListadogDoar)
     cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
-    sorte=random.choice(list(cachorros.keys()))      
-    
-    return render_template('adotar.html', user=user, cao=sorte)
+    sorte=random.choice(list(cachorros.keys()))
+    caesdoar= eval(PETinder.get_sync(point="/ListadogDoar/{0}".format(sorte)))
+        
+    return render_template('adotar.html', user=user, cao=sorte, caesdoar=caesdoar)
     
 @app.route('/adote', methods=['POST', 'GET'])
 def adote():
@@ -299,12 +300,23 @@ def adote():
 
 @app.route('/del', methods=['POST', 'GET']) 
 def delete1():
+    user=request.args['user']
     nome=request.args['nome']
 #    Del_CaesBR(nome)
     Del_CaesDoar(nome)
     
     #apos finalizar o tratamento, volta para a pagina principal
-    return redirect(url_for('perfil'))   
+    return redirect(url_for('doar', user=user))   
+    
+@app.route('/deld', methods=['POST', 'GET']) 
+def delete2():
+    user=request.args['user']
+    nome=request.args['nome']
+#    Del_CaesBR(nome)
+    Del_CaesBR(nome)
+    
+    #apos finalizar o tratamento, volta para a pagina principal
+    return redirect(url_for('perfil', user=user))  
 
 if __name__ == '__main__':
     app.run(debug=True, host= '0.0.0.0', port=5000)   

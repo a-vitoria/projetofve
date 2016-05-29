@@ -35,9 +35,12 @@
 <br></br>
 </div>
 <div class="col_8">
-<img class="caption" title=	{% for e in caesad: %}
-{{ caesad[e].nome }}, {{ caesad[e].idade }} anos, {{ caesad[e].cidade }}
-{% endfor %}, src="teste2.jpg" />
+<img class="image" src="teste2.jpg" />
+{% for e in caesdoar: %}
+<br><strong>Nome:</strong> {{ caesdoar[e].cao }}
+<br><strong>Idade:</strong> {{ caesdoar[e].idade }} anos
+<br><strong>Cidade:</strong> {{ caesdoar[e].cidade }}
+{% endfor %}
 </div>
 <div class="col_2">
 <br></br>
