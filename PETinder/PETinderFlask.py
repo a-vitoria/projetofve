@@ -1,13 +1,30 @@
 from flask import Flask, render_template, request, url_for, redirect
 import random
 import firecall
-#
+"""
+O FireBase é um database que utiliza dicionarios e listas para fazer armazanamentos,
+para isso criamos o nosso, chamado PETinder, onde salva os dicionarios que queremos 
+na url a seguir:https://petinder.firebaseio.com/ e usamos metodos do firecall
+ que importamos para fazer esta conexao
+"""
+"""
+O firecall faz essa ligacao entre o flask e FireBase, os metodos importados para uso sao
+arquivos como put, para inserir o dado recebido para o firebase e get para que pegar um
+dado no firebase e enviar para o flask, alem disso utilizamos o eval que funciona 
+como um transformador, ele pega os dados do firebase em binario e transforma em string
+
+"""
 PETinder=firecall.Firebase("https://petinder.firebaseio.com/")
 USER=[]
 NOME=[]
 ListadogBR=[]
 ListadogDoar=[]
-
+'''As listas acima foram criadas para armazenar todos os dados que necessitariamos
+fazer verificacoes se ja existe um nome ou email, utilizado apenas para facilitar 
+o uso geral. As funcoes abaixo sao usadas para pegar deletar os caes, nao sao 
+partes do objeto porque alem o usuario poder apagar, ao ser adotado ou encontrado
+um parceiro por parte de outra pessoa que pode aceitar o cao, assim, o cao nao deve esetar disponivel na lista do outro
+'''
 def Del_CaesBR(nome):
     dono=eval(PETinder.get_sync(point="/ListadogBR/{0}/nomepessoa".format(nome)))
     PETinder.delete_sync(point="Pessoas/{0}/Caes_BR/{1}".format(dono,nome))
@@ -18,7 +35,10 @@ def Del_CaesDoar(nome):
     PETinder.delete_sync(point="Pessoas/{0}/CaesDoar/{1}".format(dono,nome))
     PETinder.delete_sync(point="ListadogDoar/{0}".format(nome))
     
-        
+'''
+Objetos foram criados para facilitar na montagem dos atributos de cada pessoa, 
+e cada cao, deixando o codigo mais organizado e facil de arrumar
+'''
 class Pessoa():
     
     def __init__(self, pessoa, nomepessoa, email, senha):
@@ -94,7 +114,11 @@ class CaesDoar(Caes):
         ListadogDoar.append(self.dicionariocaodoa)
         PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user,self.nome),data=self.dicionariocaodoa)
         PETinder.put_sync(point="/ListadogDoar/{0}".format(self.nome),data=ListadogDoar[-1])
-        
+"""
+Aqui seria todos os metodos que utilizamos para controlar melhor o que colocamos no FireBase,
+ao longo do codigo ha outros metodos para fazer pesquisas no FireBase, porem nao criamos funcoes
+porque seria algo que teria uso pequeno, em condicoes especiais
+"""
 
 app = Flask(__name__, static_url_path='')
 
@@ -220,25 +244,25 @@ def caddoar():
         use=eval(PETinder.get_sync(point="/ListadogBR"))
         if nome in use:
             e = 'Usuário já cadastrado'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         elif nome == "":
             e = 'O campo Nome está vazio'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         elif raca == "":
             e = 'O campo raca está vazio'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)       
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)       
         elif sexo == 0:
             e = 'O campo sexo deve ser selecionado'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)        
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)        
         elif cidade == "":
             e = 'O campo cidade está vazio'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         elif idade == "":
             e = 'O campo idade está vazio'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         elif cor == "":
             e = 'O campo cor está vazio'
-            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)), erro = e)
+            return render_template('caddoar.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         else:
             NOME.append(nome)
             NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
@@ -293,6 +317,7 @@ def perfil():
             listacaes.append(caes)
     #página que mostrará os animais cadastrados pelo usuário
             return render_template('perfil.html', nomepessoa=user, caesb=caesb)
+    
     except:
         return render_template('perfil.html', nomepessoa=user)
     
@@ -375,18 +400,16 @@ def delete2():
 def delete3():
     user=request.args['user']
     nome=request.args['nome']
-    button = request.form['button']
     print ('chegou')
-    if button == 'confirma':
-        print ('ta quase')
+    
+    print ('ta quase')
 #    Del_CaesBR(nome)
-        Del_CaesDoar(nome)
+    Del_CaesDoar(nome)
     
     #apos finalizar o tratamento, volta para a pagina principal
-        return render_template('home.html', user=user)
+    return render_template('home.html', user=user)
         
-    return redirect(url_for('adote', user=user)) 
-    
+        
 @app.route('/deldfinal', methods=['POST', 'GET']) 
 def delete4():
     user=request.args['user']
