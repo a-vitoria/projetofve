@@ -8,7 +8,25 @@ NOME=[]
 ListadogBR=[]
 ListadogDoar=[]
 
+def Del_CaesBR(nome):
+    print(nome)
+    dono=(PETinder.get_sync("/ListadogBR/{0}/nomepessoa".format(nome)))
+    print(dono)
+    PETinder.delete_sync(point="Pessoas/{0}/Caes_BR/{1}".format(dono,nome))
+    PETinder.delete_sync(point="ListadogBR/{0}".format(nome))
 
+def Del_CaesDoar(nome):
+    print(nome)
+    dono=(PETinder.get_sync("/ListadogDoar/{0}/nomepessoa".format(nome)))
+    print (dono)
+    PETinder.delete_sync(point="Pessoas/{0}/CaesDoar/{1}".format(dono,nome))
+    PETinder.delete_sync(point="ListadogDoar/{0}".format(nome))
+
+def Criar_dic(nome):
+    name=eval(PETinder.get_sync("/ListadogDoar/{0}".format(nome)))
+    return name
+
+        
 class Pessoa():
     
     def __init__(self, pessoa, nomepessoa, email, senha):
@@ -59,20 +77,13 @@ class CaesBR(Caes):
         self.dicionariocaosex["idade"]=self.idade
         self.dicionariocaosex["cor"]=self.cor        
         self.dicionariocaosex["saude"]=self.saude
+        self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(user)))        
         self.dicionariocaosex["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogBR.append(self.dicionariocaosex)
         PETinder.put_sync(point="/Pessoas/{0}/Caes_BR/{1}".format(user,self.nome),data=self.dicionariocaosex)
         PETinder.put_sync(point="/ListadogBR/{0}".format(self.nome),data=ListadogBR[-1])
         
-def Del_CaesBR(nome):
-    print(nome)
-    dono=(PETinder.get_sync("/ListadogBR/{0}/nomepessoa".format(nome)))
-    print(dono)
-    PETinder.delete_sync(point="Pessoas/{0}/Caes_BR/{1}".format(dono,nome))
-    PETinder.delete_sync(point="ListadogBR/{0}".format(nome))
 
-        
-        
 class CaesDoar(Caes):
     def __init__(self,nome,raca,sexo,cidade,idade,cor,saude):
         Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude)
@@ -86,17 +97,12 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["idade"]=self.idade
         self.dicionariocaodoa["cor"]=self.cor        
         self.dicionariocaodoa["saude"]=self.saude
+        self.dicionariocaodoa["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(user)))        
         self.dicionariocaodoa["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogDoar.append(self.dicionariocaodoa)
         PETinder.put_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user,self.nome),data=self.dicionariocaodoa)
         PETinder.put_sync(point="/ListadogDoar/{0}".format(self.nome),data=ListadogDoar[-1])
         
-def Del_CaesDoar(nome):
-    print(nome)
-    dono=(PETinder.get_sync("/ListadogDoar/{0}/nomepessoa".format(nome)))
-    print (dono)
-    PETinder.delete_sync(point="Pessoas/{0}/CaesDoar/{1}".format(dono,nome))
-    PETinder.delete_sync(point="ListadogDoar/{0}".format(nome))
 
 app = Flask(__name__, static_url_path='')
 
@@ -291,12 +297,8 @@ def adotar():
 def adote():
     user=request.args['user']
     cao = request.args['cao']
-    adot=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar".format(user)))
-    listaadote=[]    
-    for f in adot:
-        caesad=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar/{1}".format(user, f)))
-        listaadote.append(caesad)
-    return render_template('adote.html', caesad=caesad, user=user, cao=cao)
+    name=Criar_dic(cao)    
+    return render_template('adote.html', user=user, cao=cao, name=name)
 
 @app.route('/del', methods=['POST', 'GET']) 
 def delete1():
