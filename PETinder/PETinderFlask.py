@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect
+from werkzeug import secure_filename
+import os
 import random
 import firecall
 """
@@ -119,8 +121,15 @@ Aqui seria todos os metodos que utilizamos para controlar melhor o que colocamos
 ao longo do codigo ha outros metodos para fazer pesquisas no FireBase, porem nao criamos funcoes
 porque seria algo que teria uso pequeno, em condicoes especiais
 """
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__, static_url_path='')
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @app.route('/', methods=['POST','GET'])
 def firstpage():
@@ -204,7 +213,12 @@ def cadastro():
         cor = request.form['cor'] #Recebe cor do HTML
         saude = request.form['saude'] #Recebe saude do HTML
         use=eval(PETinder.get_sync(point="/ListadogBR")) #Chama a ListadogBR do firebase
-        #Condições de cadastro do cão:
+        file = request.files['file']
+        #Condições de cadastro do cão:   
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            
         if nome in use:
             e = 'Cão já cadastrado'
             return render_template('cadastrorepetido.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
@@ -231,7 +245,7 @@ def cadastro():
             NOME.append(nome)
             NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
             NOME[-1].Salvar_CaesBR(user)
-            return redirect(url_for('perfil', user=user))
+            return redirect(url_for('perfil', user=user, filename=filename))
 
     return render_template('cadastro.html',nomepessoa = user, erro = '')
     
@@ -251,6 +265,11 @@ def caddoar():
         saude = request.form['saude']
         use=eval(PETinder.get_sync(point="/ListadogDoar"))
         print(sexo)
+        file = request.files['file']
+        #Condições de cadastro do cão para doar:   
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         if nome in use:
             e = 'Usuário já cadastrado'
             return render_template('caddoarrepetido.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
@@ -276,7 +295,7 @@ def caddoar():
             NOME.append(nome)
             NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
             NOME[-1].Salvar_CaesDoar(user)
-            return redirect(url_for('doar', user=user))
+            return redirect(url_for('doar', user=user, filename=filename))
         
    
     return render_template('caddoar.html', nomepessoa = user, erro = '')
@@ -324,7 +343,7 @@ def perfil():
         for j in caesb:
             caes=eval(PETinder.get_sync(point="/Pessoas/{0}/Caes_BR/{1}/nome".format(user, j)))
             listacaes.append(caes)
-    #página que mostrará os animais cadastrados pelo usuário
+ 
             return render_template('perfil.html', nomepessoa=user, caesb=caesb)
     
     except:
@@ -339,8 +358,7 @@ def doar():
         for i in caesdoar:
             caesd=eval(PETinder.get_sync(point="/Pessoas/{0}/CaesDoar/{1}/nome".format(user, i)))
             listacaesd.append(caesd)
-            #Listar_CaesDoar
-            #página que mostrará os animais cadastrados pelo usuário para doação
+
             return render_template('doar.html', nomepessoa=user, caesdoar=caesdoar)
     except:
         return render_template('doar.html', nomepessoa = user)
@@ -411,7 +429,6 @@ def delete3():
     nome=request.args['nome']
     print ('chegou')
     
-    print ('ta quase')
 #    Del_CaesBR(nome)
     Del_CaesDoar(nome)
     
