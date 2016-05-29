@@ -371,5 +371,31 @@ def delete2():
     #apos finalizar o tratamento, volta para a pagina principal
     return redirect(url_for('perfil', user=user))  
 
+@app.route('/delfinal', methods=['POST', 'GET']) 
+def delete3():
+    user=request.args['user']
+    nome=request.args['nome']
+    button = request.form['button']
+    print ('chegou')
+    if button == 'confirma':
+        print ('ta quase')
+#    Del_CaesBR(nome)
+        Del_CaesDoar(nome)
+    
+    #apos finalizar o tratamento, volta para a pagina principal
+        return render_template('home.html', user=user)
+        
+    return redirect(url_for('adote', user=user)) 
+    
+@app.route('/deldfinal', methods=['POST', 'GET']) 
+def delete4():
+    user=request.args['user']
+    nome=request.args['nome']
+#    Del_CaesBR(nome)
+    Del_CaesBR(nome)
+    
+    #apos finalizar o tratamento, volta para a pagina principal
+    return render_template('home.html', user=user)
+    
 if __name__ == '__main__':
     app.run(debug=True, host= '0.0.0.0', port=5000)   
