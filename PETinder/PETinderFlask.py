@@ -139,6 +139,7 @@ def allowed_file(filename):
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    
                                
 @app.route('/', methods=['POST','GET'])
 def firstpage():
@@ -222,7 +223,7 @@ def cadastro():
         cor = request.form['cor'] #Recebe cor do HTML
         saude = request.form['saude'] #Recebe saude do HTML
         use=eval(PETinder.get_sync(point="/ListadogBR")) #Chama a ListadogBR do firebase
-        file = request.files['file']
+        file = request.files['filename']
         
         #Condições de cadastro do cão:   
                    
@@ -274,7 +275,7 @@ def caddoar():
         cor = request.form['cor']
         saude = request.form['saude']
         use=eval(PETinder.get_sync(point="/ListadogDoar"))
-        file = request.files['file']
+        file = request.files['filename']
         #Condições de cadastro do cão para doar:   
         if nome in use:
             e = 'Usuário já cadastrado'
