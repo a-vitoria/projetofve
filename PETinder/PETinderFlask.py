@@ -67,7 +67,7 @@ class Pessoa():
 
 class Caes():
     
-    def __init__(self, nome, raca, sexo, idade, cor, saude, cidade,filename):
+    def __init__(self, nome, raca, sexo, idade, cor, saude, cidade,file):
         self.nome = nome
         self.raca = raca
         self.sexo = sexo
@@ -75,14 +75,14 @@ class Caes():
         self.idade = idade
         self.cor = cor
         self.saude = saude
-        self.filename=filename
+        self.file=file
         self.dicionariocaosex={}
         self.dicionariocaodoa={}
         
         
 class CaesBR(Caes):
-    def __init__(self,nome,raca,sexo,cidade,idade,cor,saude,filename):
-        Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude,filename)
+    def __init__(self,nome,raca,sexo,cidade,idade,cor,saude,file):
+        Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude,file)
     
     def Salvar_CaesBR(self,user):
         
@@ -93,7 +93,7 @@ class CaesBR(Caes):
         self.dicionariocaosex["idade"]=self.idade
         self.dicionariocaosex["cor"]=self.cor        
         self.dicionariocaosex["saude"]=self.saude
-        self.dicionariocaosex["foto"]=self.filename
+        self.dicionariocaosex["file"]=self.file
         self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(user)))        
         self.dicionariocaosex["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogBR.append(self.dicionariocaosex)
@@ -102,8 +102,8 @@ class CaesBR(Caes):
         
 
 class CaesDoar(Caes):
-    def __init__(self,nome,raca,sexo,cidade,idade,cor,saude,filename):
-        Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude,filename)
+    def __init__(self,nome,raca,sexo,cidade,idade,cor,saude,file):
+        Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude,file)
 
     def Salvar_CaesDoar(self,user):
         
@@ -114,7 +114,7 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["idade"]=self.idade
         self.dicionariocaodoa["cor"]=self.cor        
         self.dicionariocaodoa["saude"]=self.saude
-        self.dicionariocaodoa["foto"]=self.filename
+        self.dicionariocaodoa["foto"]=self.file
         self.dicionariocaodoa["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(user)))        
         self.dicionariocaodoa["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogDoar.append(self.dicionariocaodoa)
@@ -252,12 +252,12 @@ def cadastro():
         else:
             #Cadastra o novo cão do usuário logado e manda as informações para o firebase
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                file = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], file))
             NOME.append(nome)
-            NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade,filename)
+            NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade,file)
             NOME[-1].Salvar_CaesBR(user)
-            return redirect(url_for('perfil', user=user, filename=filename))
+            return redirect(url_for('perfil', user=user, file=file))
 
     return render_template('cadastro.html',nomepessoa = user, erro = '')
     
@@ -303,12 +303,12 @@ def caddoar():
         else:
             print("Entrou no else")
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                file = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], file))
             NOME.append(nome)
             NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
             NOME[-1].Salvar_CaesDoar(user)
-            return redirect(url_for('doar', user=user, filename=filename))
+            return redirect(url_for('doar', user=user, file=file))
         
    
     return render_template('caddoar.html', nomepessoa = user, erro = '')
