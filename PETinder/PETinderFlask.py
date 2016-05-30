@@ -122,7 +122,7 @@ Aqui seria todos os metodos que utilizamos para controlar melhor o que colocamos
 ao longo do codigo ha outros metodos para fazer pesquisas no FireBase, porem nao criamos funcoes
 porque seria algo que teria uso pequeno, em condicoes especiais
 """
-UPLOAD_FOLDER = '/documents/github/projetofve/petinder/uploads'
+UPLOAD_FOLDER = 'documents/GitHub/projetofve/PETinder/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__, static_url_path='')
