@@ -385,8 +385,8 @@ def opt():
                 sorte=random.choice(list(cachorros.keys()))            
     
     caninos=(eval(PETinder.get_sync(point = "/ListadogBR/{0}".format(sorte))))
-        
-    return render_template('opt.html', cao = sorte, caninos = caninos, nomepessoa = user)
+    file=eval(PETinder.get_sync(point="/ListadogBR/{0}/filename".format(sorte)))     
+    return render_template('opt.html', cao = sorte, filename=file, caninos = caninos, nomepessoa = user)
                 
     
     
@@ -395,18 +395,19 @@ def usuario():
     user=request.args['user']
     cao = request.args['cao']
     name=eval(PETinder.get_sync(point="/ListadogBR/{0}".format(cao)))
-    return render_template('user.html', user=user, cao=cao, name=name)
+    file=eval(PETinder.get_sync(point="/ListadogBR/{0}/filename".format(cao)))
+    return render_template('user.html', user=user,filename=file, cao=cao, name=name)
     
     
 @app.route('/adotar', methods=['POST', 'GET'])
 def adotar():
     user=request.args['user']
-    file=request.files['filename']
     cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
     sorte=random.choice(list(cachorros.keys()))
     while (eval(PETinder.get_sync(point="/ListadogDoar/{0}/nomepessoa".format(sorte)))) == user:
         sorte=random.choice(list(cachorros.keys()))           
     caesdoar= eval(PETinder.get_sync(point="/ListadogDoar/{0}".format(sorte)))
+    file=eval(PETinder.get_sync(point="/ListadogDoar/{0}/filename".format(sorte)))
  
     return render_template('adotar.html', filename = file, cao=sorte, caesdoar=caesdoar, user=user)
     
@@ -415,7 +416,8 @@ def adote():
     user=request.args['user']
     cao = request.args['cao']
     name=eval(PETinder.get_sync(point="/ListadogDoar/{0}".format(cao)))
-    return render_template('adote.html', user=user, cao=cao, name=name)
+    file=eval(PETinder.get_sync(point="/ListadogDoar/{0}/filename".format(cao)))
+    return render_template('adote.html', user=user, filename=file, cao=cao, name=name)
 
 @app.route('/del', methods=['POST', 'GET']) 
 def delete1():
