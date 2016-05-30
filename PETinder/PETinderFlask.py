@@ -67,7 +67,7 @@ class Pessoa():
 
 class Caes():
     
-    def __init__(self, nome, raca, sexo, idade, cor, saude, cidade):
+    def __init__(self, nome, raca, sexo, idade, cor, saude, cidade,filename):
         self.nome = nome
         self.raca = raca
         self.sexo = sexo
@@ -75,13 +75,14 @@ class Caes():
         self.idade = idade
         self.cor = cor
         self.saude = saude
+        self.filename=filename
         self.dicionariocaosex={}
         self.dicionariocaodoa={}
         
         
 class CaesBR(Caes):
-    def __init__(self,nome,raca,sexo,cidade,idade,cor,saude):
-        Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude)
+    def __init__(self,nome,raca,sexo,cidade,idade,cor,saude,filename):
+        Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude,filename)
     
     def Salvar_CaesBR(self,user):
         
@@ -92,6 +93,7 @@ class CaesBR(Caes):
         self.dicionariocaosex["idade"]=self.idade
         self.dicionariocaosex["cor"]=self.cor        
         self.dicionariocaosex["saude"]=self.saude
+        self.dicionariocaosex["foto"]=self.filename
         self.dicionariocaosex["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(user)))        
         self.dicionariocaosex["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogBR.append(self.dicionariocaosex)
@@ -100,8 +102,8 @@ class CaesBR(Caes):
         
 
 class CaesDoar(Caes):
-    def __init__(self,nome,raca,sexo,cidade,idade,cor,saude):
-        Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude)
+    def __init__(self,nome,raca,sexo,cidade,idade,cor,saude,filename):
+        Caes.__init__(self,nome,raca,sexo,cidade,idade,cor,saude,filename)
 
     def Salvar_CaesDoar(self,user):
         
@@ -112,6 +114,7 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["idade"]=self.idade
         self.dicionariocaodoa["cor"]=self.cor        
         self.dicionariocaodoa["saude"]=self.saude
+        self.dicionariocaodoa["foto"]=self.filename
         self.dicionariocaodoa["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(user)))        
         self.dicionariocaodoa["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogDoar.append(self.dicionariocaodoa)
@@ -122,19 +125,19 @@ Aqui seria todos os metodos que utilizamos para controlar melhor o que colocamos
 ao longo do codigo ha outros metodos para fazer pesquisas no FireBase, porem nao criamos funcoes
 porque seria algo que teria uso pequeno, em condicoes especiais
 """
-UPLOAD_FOLDER = 'documents/GitHub/projetofve/PETinder/uploads/'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__, static_url_path='')
 
+UPLOAD_FOLDER = 'uploads/'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 
 def allowed_file(filename):
     print('entrou def allowed')
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
     
-@app.route('/uploads/<filename>')
+@app.route('/temp/<filename>')
 def uploaded_file(filename):
     print('entrou def uploaded')
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
@@ -248,13 +251,11 @@ def cadastro():
             return render_template('cadastrocor.html', dic = PETinder.get_sync(point="/ListadogBR/{0}".format(nome)),nomepessoa = user, erro = e)
         else:
             #Cadastra o novo cão do usuário logado e manda as informações para o firebase
-            print("Entrou no else")
             if file and allowed_file(file.filename):
-                print("Entrou no if")
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             NOME.append(nome)
-            NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
+            NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade,filename)
             NOME[-1].Salvar_CaesBR(user)
             return redirect(url_for('perfil', user=user, filename=filename))
 
@@ -302,9 +303,8 @@ def caddoar():
         else:
             print("Entrou no else")
             if file and allowed_file(file.filename):
-                print("Entrou no if")
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             NOME.append(nome)
             NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
             NOME[-1].Salvar_CaesDoar(user)
