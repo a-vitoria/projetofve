@@ -133,14 +133,14 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 
-def allowed_file(filename):
+def allowed_file(file):
     print('entrou def allowed')
-    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+    return '.' in file and file.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
     
-@app.route('/temp/<filename>')
-def uploaded_file(filename):
+@app.route('/uploads/<file>')
+def uploaded_file(file):
     print('entrou def uploaded')
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], file)
                                
 @app.route('/', methods=['POST','GET'])
 def firstpage():

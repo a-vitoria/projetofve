@@ -16,7 +16,9 @@ python petinderflask.py
 e no seu navegador digitar na barra de endereços 127.0.0.1:5000
 
 Todas as funções e instruções de uso do aplicativo estão disponíveis no Manual do Usuário
-que está na pasta PETinder junto ao arquivo PETinderFlask.py
+que está na pasta PETinder junto ao arquivo PETinderFlask.py.
+
+ATENÇÃO: Não delete ou altere nenhum dos arquivos depois que clonar nosso diretório do GitHub!
 
 Obrigado,
 
