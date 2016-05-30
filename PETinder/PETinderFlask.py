@@ -179,7 +179,7 @@ def conta():
             return render_template('loginemail.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         elif email in mail:
             e = 'Email já cadastrado'
-            return render_template('login.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
+            return render_template('loginemailrep.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)
         elif senha == "":
             e = 'O campo Senha está vazio'
             return render_template('loginsenha.html', dic = PETinder.get_sync(point="/Pessoas/{0}".format(nomepessoa)), erro = e)        

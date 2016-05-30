@@ -22,14 +22,15 @@
 <div style="border:10px; border-style:solid; border-color:orange; padding: 1em;">
 <center>
 <img src="cadastro.png"/></center>
-<form class="vertical" method="POST" action="/caddoar?user={{ nomepessoa }}">
+<form class="vertical" method="POST" action="/caddoar?user={{ nomepessoa }}" enctype="multipart/form-data">
 <br><label for="nome"><strong><h6><font color="orange">Nome</font></strong></h6></label>
 </br>
 <input name="nome" id="nome" type="text" placeholder="Ex: Rex" />
 <br></br>
-<br><label for="foto"><strong><h6><font color="orange">Foto</font></strong></h6></label>
+<br><label for="file"><strong><h6><font color="orange">Foto</font></strong></h6></label>
 </br>
-<input name="foto" type="file" accept="image/*"/>
+<input name="file" type="file" accept="image/*"/>
+<input type="submit" value="Upload">
 <br></br>
 <br><label for="raca"><strong><h6><font color="orange">Raça</font></strong></h6></label>
 </br>
