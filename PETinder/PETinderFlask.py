@@ -6,9 +6,9 @@ import firecall
 
 """
 O FireBase é um database que utiliza dicionarios e listas para fazer armazanamentos,
-para isso criamos o nosso, chamado PETinder, onde salva os dicionarios que queremos 
-na url a seguir:https://petinder.firebaseio.com/ e usamos metodos do firecall
- que importamos para fazer esta conexao
+para isso criamos o nosso, chamado PETinder, que salva os dicionarios que queremos 
+na url a seguir:https://petinder.firebaseio.com/ 
+Usamos metodos do firecall que importamos para fazer esta conexao.
 """
 """
 O firecall faz essa ligacao entre o flask e FireBase, os metodos importados para uso sao
@@ -22,12 +22,14 @@ USER=[]
 NOME=[]
 ListadogBR=[]
 ListadogDoar=[]
+
 '''As listas acima foram criadas para armazenar todos os dados que necessitariamos
 fazer verificacoes se ja existe um nome ou email, utilizado apenas para facilitar 
 o uso geral. As funcoes abaixo sao usadas para pegar deletar os caes, nao sao 
 partes do objeto porque alem o usuario poder apagar, ao ser adotado ou encontrado
 um parceiro por parte de outra pessoa que pode aceitar o cao, assim, o cao nao deve esetar disponivel na lista do outro
 '''
+
 def Del_CaesBR(nome):
     dono=eval(PETinder.get_sync(point="/ListadogBR/{0}/nomepessoa".format(nome)))
     PETinder.delete_sync(point="Pessoas/{0}/Caes_BR/{1}".format(dono,nome))
@@ -42,6 +44,7 @@ def Del_CaesDoar(nome):
 Objetos foram criados para facilitar na montagem dos atributos de cada pessoa, 
 e cada cao, deixando o codigo mais organizado e facil de arrumar
 '''
+
 class Pessoa():
     
     def __init__(self, pessoa, nomepessoa, email, senha):
@@ -398,13 +401,14 @@ def usuario():
 @app.route('/adotar', methods=['POST', 'GET'])
 def adotar():
     user=request.args['user']
+    file=request.files['filename']
     cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
     sorte=random.choice(list(cachorros.keys()))
     while (eval(PETinder.get_sync(point="/ListadogDoar/{0}/nomepessoa".format(sorte)))) == user:
         sorte=random.choice(list(cachorros.keys()))           
     caesdoar= eval(PETinder.get_sync(point="/ListadogDoar/{0}".format(sorte)))
  
-    return render_template('adotar.html', cao=sorte, caesdoar=caesdoar, user=user)
+    return render_template('adotar.html', filename = file, cao=sorte, caesdoar=caesdoar, user=user)
     
 @app.route('/adote', methods=['POST', 'GET'])
 def adote():
