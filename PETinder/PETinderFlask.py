@@ -214,10 +214,11 @@ def cadastro():
         saude = request.form['saude'] #Recebe saude do HTML
         use=eval(PETinder.get_sync(point="/ListadogBR")) #Chama a ListadogBR do firebase
         file = request.files['file']
+        
         #Condições de cadastro do cão:   
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            foto = file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             
         if nome in use:
             e = 'Cão já cadastrado'
@@ -243,7 +244,7 @@ def cadastro():
         else:
             #Cadastra o novo cão do usuário logado e manda as informações para o firebase
             NOME.append(nome)
-            NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade)
+            NOME[-1] = CaesBR(nome, raca, sexo, idade, cor, saude, cidade, foto)
             NOME[-1].Salvar_CaesBR(user)
             return redirect(url_for('perfil', user=user, filename=filename))
 
@@ -269,7 +270,7 @@ def caddoar():
         #Condições de cadastro do cão para doar:   
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            foto = file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         if nome in use:
             e = 'Usuário já cadastrado'
             return render_template('caddoarrepetido.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
@@ -293,7 +294,7 @@ def caddoar():
             return render_template('caddoarcor.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         else:
             NOME.append(nome)
-            NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade)
+            NOME[-1] = CaesDoar(nome, raca, sexo, idade, cor, saude, cidade, foto)
             NOME[-1].Salvar_CaesDoar(user)
             return redirect(url_for('doar', user=user, filename=filename))
         
