@@ -122,10 +122,11 @@ Aqui seria todos os metodos que utilizamos para controlar melhor o que colocamos
 ao longo do codigo ha outros metodos para fazer pesquisas no FireBase, porem nao criamos funcoes
 porque seria algo que teria uso pequeno, em condicoes especiais
 """
-UPLOAD_FOLDER = '/path/to/the/uploads'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+UPLOAD_FOLDER = '/documents/github/projetofve/petinder/uploads'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__, static_url_path='')
+
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -438,25 +439,24 @@ def delete2():
 @app.route('/delfinal', methods=['POST', 'GET']) 
 def delete3():
     user=request.args['user']
-    nome=request.args['nome']
-    print ('chegou')
-    
+    cao=request.args['cao']
+
 #    Del_CaesBR(nome)
-    Del_CaesDoar(nome)
+    Del_CaesDoar(cao)
     
     #apos finalizar o tratamento, volta para a pagina principal
-    return render_template('home.html', user=user)
+    return render_template('home.html', nomepessoa=user) 
         
         
 @app.route('/deldfinal', methods=['POST', 'GET']) 
 def delete4():
     user=request.args['user']
-    nome=request.args['nome']
+    cao=request.args['cao']
 #    Del_CaesBR(nome)
-    Del_CaesBR(nome)
+    Del_CaesBR(cao)
     
     #apos finalizar o tratamento, volta para a pagina principal
-    return render_template('home.html', user=user)
+    return render_template('home.html', nomepessoa=user) 
     
 if __name__ == '__main__':
     app.run(debug=True, host= '0.0.0.0', port=5000)   
