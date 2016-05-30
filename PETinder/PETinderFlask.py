@@ -114,7 +114,7 @@ class CaesDoar(Caes):
         self.dicionariocaodoa["idade"]=self.idade
         self.dicionariocaodoa["cor"]=self.cor        
         self.dicionariocaodoa["saude"]=self.saude
-        self.dicionariocaodoa["filename"]=self.file
+        self.dicionariocaodoa["filename"]=self.filename
         self.dicionariocaodoa["email"]=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(user)))        
         self.dicionariocaodoa["nomepessoa"]=eval(PETinder.get_sync(point="/Pessoas/{0}/nomepessoa".format(user)))
         ListadogDoar.append(self.dicionariocaodoa)
@@ -128,18 +128,16 @@ porque seria algo que teria uso pequeno, em condicoes especiais
 
 app = Flask(__name__, static_url_path='')
 
-UPLOAD_FOLDER = 'uploads/'
+UPLOAD_FOLDER = 'static/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 
 def allowed_file(filename):
-    print('entrou def allowed')
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
     
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    print('entrou def uploaded')
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
                                
 @app.route('/', methods=['POST','GET'])
@@ -276,7 +274,6 @@ def caddoar():
         cor = request.form['cor']
         saude = request.form['saude']
         use=eval(PETinder.get_sync(point="/ListadogDoar"))
-        print(sexo)
         file = request.files['file']
         #Condições de cadastro do cão para doar:   
         if nome in use:
@@ -301,7 +298,6 @@ def caddoar():
             e = 'O campo cor está vazio'
             return render_template('caddoarcor.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         else:
-            print("Entrou no else")
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
