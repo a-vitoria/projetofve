@@ -461,5 +461,11 @@ def delete4():
     #apos finalizar o tratamento, volta para a pagina principal
     return render_template('home.html', nomepessoa=user) 
     
+@app.route('/voltar', methods=['POST', 'GET']) 
+def voltar():
+    user=request.args['user']
+
+    return render_template('home.html', nomepessoa=user) 
+    
 if __name__ == '__main__':
     app.run(debug=True, host= '0.0.0.0', port=5000)   
