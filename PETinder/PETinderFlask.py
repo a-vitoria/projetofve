@@ -13,7 +13,7 @@ Usamos metodos do firecall que importamos para fazer esta conexao.
 """
 O firecall faz essa ligacao entre o flask e FireBase, os metodos importados para uso sao
 arquivos como put, para inserir o dado recebido para o firebase e get para que pegar um
-dado no firebase e enviar para o flask, alem disso utilizamos o eval que funciona 
+dado no firebase e enviar para o flask, alem disso utilizaAmos o eval que funciona 
 como um transformador, ele pega os dados do firebase em binario e transforma em string
 
 """
@@ -128,7 +128,11 @@ Aqui seria todos os metodos que utilizamos para controlar melhor o que colocamos
 ao longo do codigo ha outros metodos para fazer pesquisas no FireBase, porem nao criamos funcoes
 porque seria algo que teria uso pequeno, em condicoes especiais
 """
-
+"""
+O código abaixo se refere ao Flask e tem como principal objetivo fazer o meio campo entre os
+arquivos HTML e o FireBase, ou seja, é responsável por enviar as informações coletadas pelo HTML 
+para o FireBase e enviá-las de volta para o HTML quando requisitadas.
+"""
 app = Flask(__name__, static_url_path='')
 
 UPLOAD_FOLDER = 'static/uploads/'
@@ -143,14 +147,18 @@ def allowed_file(filename):
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
     
-                               
+                             
 @app.route('/', methods=['POST','GET'])
+#A def firstpage é responsável por tudo o que irá ocorrer no end point '/'. 
+#No caso, ela receberá os dados de login e validará esses dados a partir das informações
+#armazenadas no FireBase.
+
 def firstpage():
     #LOGIN
-    if request.method == 'POST': #Quando o método for POST
-        nomepessoa = request.form['nomepessoa'] #Recebe nomepessoa do HTML
-        senha = request.form['senha'] #Recebe senha do HTML
-        L = eval(PETinder.get_sync(point="/ListaUSER")) #Chama ListaUSER do firebase
+    if request.method == 'POST': 
+        nomepessoa = request.form['nomepessoa'] 
+        senha = request.form['senha'] 
+        L = eval(PETinder.get_sync(point="/ListaUSER")) 
         #Validação do login:
         if nomepessoa in L:
             listasenha=[]
@@ -170,14 +178,19 @@ def firstpage():
 
     
 @app.route('/login', methods=['POST','GET'])
+#A def conta é responsável por tudo o que irá ocorrer no end point 'login'.
+#Essa def recebe os dados inseridos pelo usuário, passa eles pelas condições de cadastro
+#e, caso esteja tudo correto, envia os dados para o FireBase. Caso não passe em algumas das 
+#condições, a def retorna uma mensagem de erro que será exibida para o usuário pelo HTML.
+
 def conta():
     #CADASTRO DO USUÁRIO
     if request.method == 'POST':
-        nome = request.form['pessoa'] #Recebe pessoa do HTML como nome
-        nomepessoa = request.form['nomepessoa'] #Recebe nomepessoa do HTML
-        email = request.form['email'] #Recebe email do HTML
-        senha = request.form['senha'] #Recebe senha do HTML
-        use= eval(PETinder.get_sync(point="/ListaUSER")) #Chama ListaUSER do firebase
+        nome = request.form['pessoa'] 
+        nomepessoa = request.form['nomepessoa'] 
+        email = request.form['email'] 
+        senha = request.form['senha'] 
+        use= eval(PETinder.get_sync(point="/ListaUSER")) 
         mail=[]        
         for p in use:        
             usemail=eval(PETinder.get_sync(point="/Pessoas/{0}/email".format(p)))
@@ -213,19 +226,24 @@ def conta():
     return render_template('login.html', erro = '')
     
 @app.route('/cadastro', methods=['POST','GET'])
+#A def cadastro é responsável por tudo que ocorre no end point '/cadastro'.
+#Ela receberá os dados de cadastro de um cão para encontrar parceiro e, após passar pelas
+#condições de cadastro, irá armazenar o cão no usuário logado no momento. Se os dados não 
+#passarem pelas condições ela retornará, também, uma mensagem de erro.
+
 def cadastro():
     #CADASTRO DE CÃES PARA ENCONTRAR PARCEIRO
     user=request.args['user'] #Chama o usuário que está logado  
     if request.method=='POST':
 
-        nome = request.form['nome'] #Recebe nome do HTML
-        raca = request.form['raca'] #Recebe raca do HTML
-        sexo = request.form['sexo'] #Recebe sexo do HTML
-        cidade = request.form['cidade'] #Recebe cidade do HTML
-        idade = request.form['idade'] #Recebe idade do HTML
-        cor = request.form['cor'] #Recebe cor do HTML
-        saude = request.form['saude'] #Recebe saude do HTML
-        use=eval(PETinder.get_sync(point="/ListadogBR")) #Chama a ListadogBR do firebase
+        nome = request.form['nome'] 
+        raca = request.form['raca'] 
+        sexo = request.form['sexo'] 
+        cidade = request.form['cidade']
+        idade = request.form['idade'] 
+        cor = request.form['cor'] 
+        saude = request.form['saude']
+        use=eval(PETinder.get_sync(point="/ListadogBR")) 
         file = request.files['filename']
         
         #Condições de cadastro do cão:   
@@ -266,6 +284,11 @@ def cadastro():
     
     
 @app.route('/caddoar', methods=['POST','GET'])
+#A def caddoar é responsável por tudo que ocorre no end point '/caddoar'.
+#Ela receberá os dados de cadastro de um cão para doar e, após passar pelas
+#condições de cadastro, irá armazenar o cão no usuário logado no momento. Novamente,
+#se os dados não passarem pelas condições ela retornará uma mensagem de erro.
+
 def caddoar():
     #CADASTRO DE CÃES PARA DOAR
     user=request.args['user']
@@ -302,6 +325,7 @@ def caddoar():
             e = 'O campo cor está vazio'
             return render_template('caddoarcor.html', dic = PETinder.get_sync(point="/Listadogoar/{0}".format(nome)),nomepessoa = user, erro = e)
         else:
+            #Cadastra o novo cão do usuário logado e manda as informações para o firebase
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -314,6 +338,11 @@ def caddoar():
     return render_template('caddoar.html', nomepessoa = user, erro = '')
         
 @app.route('/home', methods=['POST', 'GET'])
+#A def home é responsável por tudo o que irá ocorrer no end point '/home'.
+#A def irá identificar qual dos três botões criados pelo HTML foi selecionado pelo usuário
+#e o redicionará para a próxima página, que é referente ao botão escolhido. Além disso, ela
+#retornará todas as informações necessárias para as páginas seguintes.
+
 def home():
   
     button=request.form['button']
@@ -348,6 +377,10 @@ def home():
     return render_template('home.html', nomepessoa = user)
         
 @app.route('/perfil', methods=['POST', 'GET'])
+#A def perfil é responsável por tudo o que irá ocorrer no end point '/perfil'.
+#Ela irá pegar os dados do FireBase referentes aos cachorros cadastrado para encontrar 
+#um parceiro do usuário logado e retornará os nomes desses cães para o HTML.
+
 def perfil():
     user=request.args['user']
     try:
@@ -363,6 +396,10 @@ def perfil():
         return render_template('perfil.html', nomepessoa=user)
     
 @app.route('/doar', methods=['POST', 'GET'])
+#A def doar é responsável por tudo o que irá ocorrer no end point '/doar'.
+#Ela irá pegar os dados do FireBase referentes aos cachorros cadastrado para doar 
+#do usuário logado e retornará os nomes desses cães para o HTML.
+
 def doar():
     user=request.args['user']
     try:
@@ -377,6 +414,11 @@ def doar():
         return render_template('doar.html', nomepessoa = user)
         
 @app.route('/opt', methods=['POST', 'GET'])
+#A def opt é responsável por tudo o que irá ocorrer no end point '/opt'.
+#Essa def irá receber do FireBase os dados de todos os cães cadastrados para encontrar um 
+#parceiro (com exceção do cão do usuário logado) e retornará alguns dados de cada ção para 
+#o HTML. 
+
 def opt():
     user=request.args['user']
     cachorros=(eval(PETinder.get_sync(point = "/ListadogBR")))
@@ -391,6 +433,10 @@ def opt():
     
     
 @app.route('/user', methods=['POST', 'GET'])
+#A def usuario é responsável por tudo o que irá ocorrer no end point '/user'.
+#Ela irá receber do FireBase todas as informções do cão escolhido pelo usuário no
+#end point '/opt' e os retornará para o HTML.
+
 def usuario():
     user=request.args['user']
     cao = request.args['cao']
@@ -400,6 +446,11 @@ def usuario():
     
     
 @app.route('/adotar', methods=['POST', 'GET'])
+#A def adotar é responsável por tudo o que irá ocorrer no end point '/adotar'.
+#Essa def irá receber do FireBase os dados de todos os cães cadastrados para doação
+#(com exceção dos cães do usuário logado) e retornará alguns dados de cada ção para 
+#o HTML. 
+
 def adotar():
     user=request.args['user']
     cachorros=eval(PETinder.get_sync(point="/ListadogDoar"))
@@ -412,6 +463,10 @@ def adotar():
     return render_template('adotar.html', filename = file, cao=sorte, caesdoar=caesdoar, user=user)
     
 @app.route('/adote', methods=['POST', 'GET'])
+#A def adote é responsável por tudo o que irá ocorrer no end point '/adote'.
+#Ela irá receber do FireBase todas as informções do cão escolhido pelo usuário no
+#end point '/adotar' e os retornará para o HTML.
+
 def adote():
     user=request.args['user']
     cao = request.args['cao']
@@ -420,52 +475,64 @@ def adote():
     return render_template('adote.html', user=user, filename=file, cao=cao, name=name)
 
 @app.route('/del', methods=['POST', 'GET']) 
+#A def delete1 é responsável pelo o que irá ocorrer no end point '/del'.
+#Ao ser acionada, ela irá chamar a função do FireBase que irá deletar o cão que o usuário 
+#desejar no end point '/doar'.
+
 def delete1():
     user=request.args['user']
     nome=request.args['nome']
-#    Del_CaesBR(nome)
     Del_CaesDoar(nome)
     
-    #apos finalizar o tratamento, volta para a pagina principal
     return redirect(url_for('doar', user=user))   
     
 @app.route('/deld', methods=['POST', 'GET']) 
+#A def delete2 é responsável pelo o que irá ocorrer no end point '/deld'.
+#Ao ser acionada, ela irá chamar a função do FireBase que irá deletar o cão que o usuário 
+#desejar no end point '/perfil'.
+
 def delete2():
     user=request.args['user']
     nome=request.args['nome']
-#    Del_CaesBR(nome)
     Del_CaesBR(nome)
     
-    #apos finalizar o tratamento, volta para a pagina principal
     return redirect(url_for('perfil', user=user))  
 
 @app.route('/delfinal', methods=['POST', 'GET']) 
+#A def delete3 é responsável pelo o que irá ocorrer no end point '/delfinal'.
+#Ao ser acionada, ela irá chamar a função do FireBase que irá deletar o cão que o usuário 
+#escolheu para adotar da lista de cães disponíveis. Depois, ela fará o usuário voltar para 
+#o end point '/home'
+
 def delete3():
     user=request.args['user']
     cao=request.args['cao']
-
-#    Del_CaesBR(nome)
     Del_CaesDoar(cao)
     
-    #apos finalizar o tratamento, volta para a pagina principal
     return render_template('home.html', nomepessoa=user) 
         
         
-@app.route('/deldfinal', methods=['POST', 'GET']) 
+@app.route('/deldfinal', methods=['POST', 'GET'])
+#A def delete4 é responsável pelo o que irá ocorrer no end point '/deldfinal'.
+#Ao ser acionada, ela irá chamar a função do FireBase que irá deletar o cão que o usuário 
+#escolheu para formar um parceiro com o seu da lista de cães disponíveis. Depois, ela fará 
+#o usuário voltar para o end point '/home'
+ 
 def delete4():
     user=request.args['user']
     cao=request.args['cao']
-#    Del_CaesBR(nome)
     Del_CaesBR(cao)
     
-    #apos finalizar o tratamento, volta para a pagina principal
     return render_template('home.html', nomepessoa=user) 
     
 @app.route('/voltar', methods=['POST', 'GET']) 
+#A def voltar é responsável pelo o que irá ocorrer no end point '/voltar'.
+#Ela tem como único objetivo voltar para home.html com o usuário logado.
+
 def voltar():
     user=request.args['user']
 
     return render_template('home.html', nomepessoa=user) 
     
 if __name__ == '__main__':
-    app.run(debug=True, host= '0.0.0.0', port=5000)   
+    app.run(debug=True, host= '0.0.0.0', port=5000) #Começa o programa 
